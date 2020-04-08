@@ -1,0 +1,216 @@
+<template>
+  <main>
+    <section class="flex flex-col justify-center items-center my-4">
+      <div class="font-mono text-5xl md:text-6xl">
+        {{ formattedElapsedTime }}
+      </div>
+      <div class="font-mono text-3xl md:text-4xl my-2">00:00:00</div>
+      <div class="flex flex-row justify-evenly w-full mt-4">
+        <button
+          class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
+          leading-6 font-medium text-white hover:bg-gray-800 transition
+          ease-in-out duration-150"
+          @click="startStop"
+        >
+          <svg
+            v-if="!paused"
+            stroke="currentColor"
+            viewBox="0 0 512 528"
+            class="mr-3 h-6 w-6"
+          >
+            <path
+              d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
+              stroke-miterlimit="10"
+              stroke-width="32"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-miterlimit="10"
+              stroke-width="32"
+              d="M208 192v128M304 192v128"
+            />
+          </svg>
+          <svg
+            v-else
+            stroke="currentColor"
+            viewBox="0 0 512 528"
+            class="mr-3 h-6 w-6"
+          >
+            <path
+              d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
+              fill="none"
+              stroke="currentColor"
+              stroke-miterlimit="10"
+              stroke-width="32"
+            />
+            <path
+              d="M216.32 334.44l114.45-69.14a10.89 10.89 0
+              000-18.6l-114.45-69.14a10.78 10.78 0 00-16.32
+              9.31v138.26a10.78 10.78 0 0016.32 9.31z"
+              fill="currentColor"
+            />
+          </svg>
+          <p>{{ paused ? (!time ? 'Start' : 'Resume') : 'Pause' }}</p>
+        </button>
+        <button
+          class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
+          leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150"
+        >
+          <svg stroke="currentColor" viewBox="0 0 528 528" class="mr-3 h-6 w-6">
+            <path
+              d="M145.61 464h220.78c19.8 0 35.55-16.29 33.42-35.06C386.06
+              308 304 310 304 256s83.11-51
+              95.8-172.94c2-18.78-13.61-35.06-33.41-35.06H145.61c-19.8
+              0-35.37 16.28-33.41 35.06C124.89 205 208 201 208 256s-82.06
+              52-95.8 172.94c-2.14 18.77 13.61 35.06 33.41 35.06z"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="32"
+            />
+            <path
+              d="M343.3 432H169.13c-15.6 0-20-18-9.06-29.16C186.55 376 240
+              356.78 240 326V224c0-19.85-38-35-61.51-67.2-3.88-5.31-3.49-12.8
+              6.37-12.8h142.73c8.41 0 10.23 7.43 6.4 12.75C310.82 189 272 204.05
+              272 224v102c0 30.53 55.71 47 80.4 76.87 9.95 12.04 6.47 29.13-9.1 29.13z"
+            />
+          </svg>
+          <p>Start Break</p>
+        </button>
+      </div>
+    </section>
+    <p>{{ time }}</p>
+    <button
+      class=" absolute bottom-0 right-0 border border-teal-400 px-4 py-3
+      rounded-lg mr-4 mb-4 hover:bg-gray-800"
+      @click="toggleSettings"
+    >
+      <svg fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8 cog">
+        <path
+          fill-rule="evenodd"
+          d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0
+          01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061
+          2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0
+          01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0
+          012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0
+          012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0
+          01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0
+          01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532
+          1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+    </button>
+    <transition name="slide">
+      <aside
+        v-if="settingsModalOpen"
+        class="absolute bottom-0 left-0 w-full bg-gray-600 text-white
+        rounded-t-md max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-6"
+      >
+        <h2 class="text-2xl font-bold mb-2 mt-1">Settings</h2>
+
+        <div>
+          <label
+            for="break"
+            class="block text-sm leading-5 font-medium text-gray-200 "
+            >Break time</label
+          >
+          <div class="mt-1 relative">
+            <input
+              id="break"
+              class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
+              placeholder="90"
+              type="number"
+            />
+            <div
+              class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+            >
+              <span class="text-gray-400 text-sm leading-5">
+                seconds
+              </span>
+            </div>
+          </div>
+        </div>
+        <button
+          class="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex
+          items-center justify-center px-6 py-3 border border-transparent
+          text-base leading-6 font-semibold rounded-md text-white
+          bg-green-500 shadow-sm hover:bg-green-700
+          focus:outline-none focus:bg-green-700 transition ease-in-out duration-150"
+          @click="toggleSettings"
+        >
+          Save
+        </button>
+      </aside>
+    </transition>
+  </main>
+</template>
+
+<script>
+import Vue from 'vue';
+
+export default Vue.extend({
+  data() {
+    return {
+      settingsModalOpen: false,
+      paused: true,
+      time: 0,
+      timer: null,
+    };
+  },
+  computed: {
+    formattedElapsedTime() {
+      const date = new Date(null);
+      date.setSeconds(this.time / 1000);
+      const utc = date.toUTCString();
+      return utc.substr(utc.indexOf(':') - 2, 8);
+    },
+  },
+  methods: {
+    toggleSettings() {
+      this.settingsModalOpen = !this.settingsModalOpen;
+    },
+    startStop() {
+      if (!this.time || this.paused === true) this.start();
+      else this.stop();
+    },
+    start() {
+      this.paused = false;
+      this.timer = setInterval(() => {
+        this.time += 1000;
+      }, 1000);
+    },
+    stop() {
+      this.paused = true;
+      clearInterval(this.timer);
+    },
+    reset() {
+      this.elapsedTime = 0;
+    },
+  },
+});
+</script>
+
+<style>
+/* removes the arrows next to the number input */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Settings Modal Transition */
+.slide-enter-active,
+.slide-leave-active {
+  transition: height 0.25s ease-in-out;
+  height: 190px;
+}
+
+.slide-enter,
+.slide-leave-to {
+  height: 0;
+}
+</style>
