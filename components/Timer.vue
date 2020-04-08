@@ -4,8 +4,10 @@
       <div class="font-mono text-5xl md:text-6xl">
         {{ formattedElapsedTime }}
       </div>
-      <div class="font-mono text-3xl md:text-4xl my-2">00:00:00</div>
-      <div class="flex flex-row justify-evenly w-full mt-4">
+      <div class="font-mono text-3xl md:text-4xl my-2">
+        {{ formattedBreakTime }}
+      </div>
+      <div class="flex flex-row flex-wrap justify-evenly w-full mt-4">
         <button
           class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
           leading-6 font-medium text-white hover:bg-gray-800 transition
@@ -55,6 +57,7 @@
         <button
           class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
           leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150"
+          @click="startStopBreak"
         >
           <svg stroke="currentColor" viewBox="0 0 528 528" class="mr-3 h-6 w-6">
             <path
@@ -76,11 +79,26 @@
               272 224v102c0 30.53 55.71 47 80.4 76.87 9.95 12.04 6.47 29.13-9.1 29.13z"
             />
           </svg>
-          <p>Start Break</p>
+          <p v-if="onBreak">
+            Pause Break
+          </p>
+          <p v-else>
+            {{ breakLeft > 0 ? 'Resume' : 'Start' }} Break <span class="text-sm">({{ breakLength }}s)</span>
+          </p>
         </button>
       </div>
+        <button
+          v-if="onBreak === false && breakLeft > 0"
+          class="flex self-end mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
+          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150" @click="resetBreak">
+        <svg viewBox="0 0 512 512" class="mr-3 mt-2 h-4 w-4" stroke="currentColor">
+          <path d="M320 146s24.36-12-64-12a160 160 0 10160 160" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"/>
+          <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 58l80 80-80 80"/>
+          </svg>
+          Reset Break
+        </button>
     </section>
-    <p>{{ time }}</p>
+    <p>{{ time }} || {{ breakLeft }}</p>
     <button
       class=" absolute bottom-0 right-0 border border-teal-400 px-4 py-3
       rounded-lg mr-4 mb-4 hover:bg-gray-800"
@@ -118,6 +136,7 @@
           >
           <div class="mt-1 relative">
             <input
+             v-model="breakLength"
               id="break"
               class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
               placeholder="90"
@@ -155,8 +174,12 @@ export default Vue.extend({
     return {
       settingsModalOpen: false,
       paused: true,
+      onBreak: false,
       time: 0,
       timer: null,
+      breakLeft: 0,
+      breakLength: 90,
+      breakTimer: null,
     };
   },
   computed: {
@@ -166,27 +189,83 @@ export default Vue.extend({
       const utc = date.toUTCString();
       return utc.substr(utc.indexOf(':') - 2, 8);
     },
+    formattedBreakTime() {
+      const date = new Date(null);
+      date.setSeconds(this.breakLeft);
+      const utc = date.toUTCString();
+      return utc.substr(utc.indexOf(':') - 2, 8);
+    },
+  },
+  destroyed() {
+    // save to local storage
+  //   if(this.timer)clearInterval(this.timer);
+  //  if(this.breakTimer) clearInteval(this.breakTimer)
   },
   methods: {
     toggleSettings() {
       this.settingsModalOpen = !this.settingsModalOpen;
     },
     startStop() {
-      if (!this.time || this.paused === true) this.start();
-      else this.stop();
+      if (!this.time || this.paused === true){
+        // initial state --> start timer
+        this.start()
+      }
+      else {
+        // stop (pause) all timers
+        this.stop();
+        if (this.breakTimer) {
+           this.onBreak = false;
+            clearTimeout(this.breakTimer);
+        }
+        // else this.startStopBreak()
+      }
+    },
+    startStopBreak() {
+      if(this.paused) this.start()
+      if (this.onBreak) {
+        // pause break
+        this.onBreak = false;
+        clearTimeout(this.breakTimer);
+      } else if(this.onBreak === false && !(this.breakLeft === 0) && (this.breakLeft < this.breakLength)){
+        this.onBreak = true;
+        this.countdownBreak();
+      }
+      else {
+        // pause break
+        this.onBreak = true;
+        this.breakLeft = this.breakLength;
+        this.countdownBreak();
+      }
+    },
+    countdownBreak() {
+      if (this.time === 0) this.startStop();
+
+      if (this.breakLeft > 0)
+        this.breakTimer = setTimeout(() => {
+          this.breakLeft -= 1;
+          this.countdownBreak();
+        }, 1000);
+      // break over
+      else this.onBreak = false;
+    },
+    resetBreak() {
+      this.breakLeft = 0;
+      this.onBreak = false;
     },
     start() {
       this.paused = false;
       this.timer = setInterval(() => {
-        this.time += 1000;
-      }, 1000);
+        this.time += 100;
+      }, 100);
     },
     stop() {
       this.paused = true;
       clearInterval(this.timer);
     },
     reset() {
-      this.elapsedTime = 0;
+      this.time = 0;
+      this.paused = true;
+      this.timer = null;
     },
   },
 });
