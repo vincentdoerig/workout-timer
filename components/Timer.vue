@@ -1,13 +1,16 @@
 <template>
   <main>
     <section class="flex flex-col justify-center items-center my-4">
-      <div class="font-mono text-5xl md:text-6xl">
+      <div class="font-mono stopwatch">
         {{ formattedElapsedTime }}
       </div>
-      <div class="font-mono text-3xl md:text-4xl my-2">
+      <div class="font-mono countdown my-2">
         {{ formattedBreakTime }}
       </div>
-      <div class="flex flex-row flex-wrap justify-evenly w-full mt-4">
+      <div
+        class="flex flex-row flex-wrap justify-evenly
+      items-start w-full mt-4"
+      >
         <button
           class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
           leading-6 font-medium text-white hover:bg-gray-800 transition
@@ -54,72 +57,84 @@
           </svg>
           <p>{{ paused ? (!time ? 'Start' : 'Resume') : 'Pause' }}</p>
         </button>
-        <button
-          class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
+        <div class="flex flex-col items-start">
+          <button
+            class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
           leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150"
-          @click="startStopBreak"
-        >
-          <svg stroke="currentColor" viewBox="0 0 528 528" class="mr-3 h-6 w-6">
-            <path
-              d="M145.61 464h220.78c19.8 0 35.55-16.29 33.42-35.06C386.06
+            @click="startStopBreak"
+          >
+            <svg
+              stroke="currentColor"
+              viewBox="0 0 528 528"
+              class="mr-3 h-6 w-6"
+            >
+              <path
+                d="M145.61 464h220.78c19.8 0 35.55-16.29 33.42-35.06C386.06
               308 304 310 304 256s83.11-51
               95.8-172.94c2-18.78-13.61-35.06-33.41-35.06H145.61c-19.8
               0-35.37 16.28-33.41 35.06C124.89 205 208 201 208 256s-82.06
               52-95.8 172.94c-2.14 18.77 13.61 35.06 33.41 35.06z"
-              fill="currentColor"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="32"
-            />
-            <path
-              d="M343.3 432H169.13c-15.6 0-20-18-9.06-29.16C186.55 376 240
+                fill="currentColor"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="32"
+              />
+              <path
+                d="M343.3 432H169.13c-15.6 0-20-18-9.06-29.16C186.55 376 240
               356.78 240 326V224c0-19.85-38-35-61.51-67.2-3.88-5.31-3.49-12.8
               6.37-12.8h142.73c8.41 0 10.23 7.43 6.4 12.75C310.82 189 272 204.05
               272 224v102c0 30.53 55.71 47 80.4 76.87 9.95 12.04 6.47 29.13-9.1 29.13z"
-            />
-          </svg>
-          <p v-if="onBreak">
-            Pause Break
-          </p>
-          <p v-else>
-            {{ breakLeft > 0 ? 'Resume' : 'Start' }} Break
-            <span class="text-sm">({{ breakLength }}s)</span>
-          </p>
-        </button>
+              />
+            </svg>
+            <p v-if="onBreak">
+              Pause Break
+            </p>
+            <p v-else>
+              <span v-if="breakLeft > 0">Resume Break</span>
+              <span v-else
+                >Start Break
+                <span class="text-sm">({{ breakLength }}s)</span>
+              </span>
+            </p>
+          </button>
+          <button
+            v-if="onBreak === false && breakLeft > 0"
+            class="flex mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
+          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150 mt-4"
+            @click="resetBreak"
+          >
+            <svg
+              viewBox="0 0 512 512"
+              class="mr-3 mt-2 h-4 w-4"
+              stroke="currentColor"
+            >
+              <path
+                d="M320 146s24.36-12-64-12a160 160 0 10160 160"
+                fill="none"
+                stroke-linecap="round"
+                stroke-miterlimit="10"
+                stroke-width="32"
+              />
+              <path
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="32"
+                d="M256 58l80 80-80 80"
+              />
+            </svg>
+            Reset Break
+          </button>
+        </div>
       </div>
-      <button
-        v-if="onBreak === false && breakLeft > 0"
-        class="flex self-end mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
-          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150"
-        @click="resetBreak"
-      >
-        <svg
-          viewBox="0 0 512 512"
-          class="mr-3 mt-2 h-4 w-4"
-          stroke="currentColor"
-        >
-          <path
-            d="M320 146s24.36-12-64-12a160 160 0 10160 160"
-            fill="none"
-            stroke-linecap="round"
-            stroke-miterlimit="10"
-            stroke-width="32"
-          />
-          <path
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="32"
-            d="M256 58l80 80-80 80"
-          />
-        </svg>
-        Reset Break
-      </button>
     </section>
-    <p>{{ time }} || {{ breakLeft }}</p>
+    <div v-if="debug" class="font-mono ml-2">
+      time in milliseconds: {{ time }} <br />
+      break time left in seconds: {{ breakLeft }}
+    </div>
     <button
-      class=" absolute bottom-0 right-0 border border-teal-400 px-4 py-3
+      class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3
       rounded-lg mr-4 mb-4 hover:bg-gray-800"
       @click="toggleSettings"
     >
@@ -150,7 +165,7 @@
         <div>
           <label
             for="break"
-            class="block text-sm leading-5 font-medium text-gray-200 "
+            class="block text-sm leading-5 font-medium text-gray-200"
             >Break time</label
           >
           <div class="mt-1 relative">
@@ -169,6 +184,16 @@
               </span>
             </div>
           </div>
+          <div class="my-4">
+            <label for="debug">Debug mode</label>
+            <input
+              id="debug"
+              type="checkbox"
+              name="debug"
+              class="text-sm leading-5 font-medium text-gray-200"
+              @click="debug = !debug"
+            />
+          </div>
         </div>
         <button
           class="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex
@@ -185,114 +210,139 @@
   </main>
 </template>
 
-<script>
-import Vue from 'vue';
+<script lang="ts">
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Component, Vue } from 'nuxt-property-decorator';
+@Component
+export default class Timer extends Vue {
+  private settingsModalOpen: boolean = false;
 
-export default Vue.extend({
-  data() {
-    return {
-      settingsModalOpen: false,
-      paused: true,
-      onBreak: false,
-      time: 0,
-      timer: null,
-      breakLeft: 0,
-      breakLength: 90,
-      breakTimer: null,
-    };
-  },
-  computed: {
-    formattedElapsedTime() {
-      const date = new Date(null);
-      date.setSeconds(this.time / 1000);
-      const utc = date.toUTCString();
-      return utc.substr(utc.indexOf(':') - 2, 8);
-    },
-    formattedBreakTime() {
-      const date = new Date(null);
-      date.setSeconds(this.breakLeft);
-      const utc = date.toUTCString();
-      return utc.substr(utc.indexOf(':') - 2, 8);
-    },
-  },
-  destroyed() {
-    // save to local storage
-    //   if(this.timer)clearInterval(this.timer);
-    //  if(this.breakTimer) clearInteval(this.breakTimer)
-  },
-  methods: {
-    toggleSettings() {
-      this.settingsModalOpen = !this.settingsModalOpen;
-    },
-    startStop() {
-      if (!this.time || this.paused === true) {
-        // initial state --> start timer
-        this.start();
-      } else {
-        // stop (pause) all timers
-        this.stop();
-        if (this.breakTimer) {
-          this.onBreak = false;
-          clearTimeout(this.breakTimer);
-        }
-        // else this.startStopBreak()
-      }
-    },
-    startStopBreak() {
-      if (this.paused) this.start();
-      if (this.onBreak) {
-        // pause break
+  private paused: boolean = true;
+
+  private onBreak: boolean = false;
+
+  private time: number = 0;
+
+  private timer: any = null;
+
+  private breakLeft: number = 0;
+
+  private breakLength: number = 90;
+
+  private breakTimer: any = null;
+
+  private debug: boolean = false;
+
+  get formattedElapsedTime(): string {
+    const date: Date = new Date(0);
+    date.setSeconds(this.time / 1000);
+    const utc: string = date.toUTCString();
+    return utc.substr(utc.indexOf(':') - 2, 8);
+  }
+
+  get formattedBreakTime(): string {
+    const date: Date = new Date(0);
+    date.setSeconds(this.breakLeft);
+    const utc: string = date.toUTCString();
+    return utc.substr(utc.indexOf(':') - 2, 8);
+  }
+
+  // mounted(): void {
+  //   // prettier-ignore
+  //   if (localStorage.getItem('sw-time')){
+  // this.time = Number(JSON.parse(localStorage.getItem('sw-time')))
+  // };
+  // }
+
+  // destroy(): void {
+  //   localStorage.setItem('sw-time', JSON.stringify(this.time));
+  // }
+
+  public toggleSettings(): void {
+    this.settingsModalOpen = !this.settingsModalOpen;
+  }
+
+  public startStop(): void {
+    // initial state --> start timer
+    if (!this.time || this.paused === true) this.start();
+    else {
+      // stop (pause) all timers
+      this.stop();
+      if (this.breakTimer) {
         this.onBreak = false;
         clearTimeout(this.breakTimer);
-      } else if (
-        this.onBreak === false &&
-        !(this.breakLeft === 0) &&
-        this.breakLeft < this.breakLength
-      ) {
-        this.onBreak = true;
-        this.countdownBreak();
-      } else {
-        // pause break
-        this.onBreak = true;
-        this.breakLeft = this.breakLength;
-        this.countdownBreak();
       }
-    },
-    countdownBreak() {
-      if (this.time === 0) this.startStop();
+      // else this.startStopBreak()
+    }
+  }
 
-      if (this.breakLeft > 0)
-        this.breakTimer = setTimeout(() => {
-          this.breakLeft -= 1;
-          this.countdownBreak();
-        }, 1000);
-      // break over
-      else this.onBreak = false;
-    },
-    resetBreak() {
-      this.breakLeft = 0;
+  public startStopBreak(): void {
+    if (this.paused) this.start();
+    if (this.onBreak) {
+      // pause break
       this.onBreak = false;
-    },
-    start() {
-      this.paused = false;
-      this.timer = setInterval(() => {
-        this.time += 100;
-      }, 100);
-    },
-    stop() {
-      this.paused = true;
-      clearInterval(this.timer);
-    },
-    reset() {
-      this.time = 0;
-      this.paused = true;
-      this.timer = null;
-    },
-  },
-});
+      clearTimeout(this.breakTimer);
+    } else if (
+      this.onBreak === false &&
+      !(this.breakLeft === 0) &&
+      this.breakLeft < this.breakLength
+    ) {
+      this.onBreak = true;
+      this.countdownBreak();
+    } else {
+      // pause break
+      this.onBreak = true;
+      this.breakLeft = this.breakLength;
+      this.countdownBreak();
+    }
+  }
+
+  public countdownBreak(): void {
+    if (this.time === 0) this.startStop();
+
+    if (this.breakLeft > 0)
+      // eslint-disable-next-line nonblock-statement-body-position
+      this.breakTimer = setTimeout(() => {
+        this.breakLeft -= 1;
+        this.countdownBreak();
+      }, 1000);
+    else this.onBreak = false; // break over
+  }
+
+  public resetBreak(): void {
+    this.breakLeft = 0;
+    this.onBreak = false;
+  }
+
+  public start(): void {
+    this.paused = false;
+    this.timer = setInterval(() => {
+      this.time += 100;
+      document.title = this.formattedElapsedTime;
+    }, 100);
+  }
+
+  public stop(): void {
+    this.paused = true;
+    clearInterval(this.timer);
+    document.title = `${document.title} (stopped)`;
+  }
+
+  public reset(): void {
+    this.time = 0;
+    this.paused = true;
+    this.timer = null;
+  }
+}
 </script>
 
 <style>
+.stopwatch {
+  font-size: 10vw;
+}
+.countdown {
+  font-size: 8vw;
+}
 /* removes the arrows next to the number input */
 input[type='number'] {
   -moz-appearance: textfield;
