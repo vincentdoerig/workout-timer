@@ -83,20 +83,39 @@
             Pause Break
           </p>
           <p v-else>
-            {{ breakLeft > 0 ? 'Resume' : 'Start' }} Break <span class="text-sm">({{ breakLength }}s)</span>
+            {{ breakLeft > 0 ? 'Resume' : 'Start' }} Break
+            <span class="text-sm">({{ breakLength }}s)</span>
           </p>
         </button>
       </div>
-        <button
-          v-if="onBreak === false && breakLeft > 0"
-          class="flex self-end mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
-          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150" @click="resetBreak">
-        <svg viewBox="0 0 512 512" class="mr-3 mt-2 h-4 w-4" stroke="currentColor">
-          <path d="M320 146s24.36-12-64-12a160 160 0 10160 160" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"/>
-          <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 58l80 80-80 80"/>
-          </svg>
-          Reset Break
-        </button>
+      <button
+        v-if="onBreak === false && breakLeft > 0"
+        class="flex self-end mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
+          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150"
+        @click="resetBreak"
+      >
+        <svg
+          viewBox="0 0 512 512"
+          class="mr-3 mt-2 h-4 w-4"
+          stroke="currentColor"
+        >
+          <path
+            d="M320 146s24.36-12-64-12a160 160 0 10160 160"
+            fill="none"
+            stroke-linecap="round"
+            stroke-miterlimit="10"
+            stroke-width="32"
+          />
+          <path
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="32"
+            d="M256 58l80 80-80 80"
+          />
+        </svg>
+        Reset Break
+      </button>
     </section>
     <p>{{ time }} || {{ breakLeft }}</p>
     <button
@@ -136,8 +155,8 @@
           >
           <div class="mt-1 relative">
             <input
-             v-model="breakLength"
               id="break"
+              v-model="breakLength"
               class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
               placeholder="90"
               type="number"
@@ -198,39 +217,41 @@ export default Vue.extend({
   },
   destroyed() {
     // save to local storage
-  //   if(this.timer)clearInterval(this.timer);
-  //  if(this.breakTimer) clearInteval(this.breakTimer)
+    //   if(this.timer)clearInterval(this.timer);
+    //  if(this.breakTimer) clearInteval(this.breakTimer)
   },
   methods: {
     toggleSettings() {
       this.settingsModalOpen = !this.settingsModalOpen;
     },
     startStop() {
-      if (!this.time || this.paused === true){
+      if (!this.time || this.paused === true) {
         // initial state --> start timer
-        this.start()
-      }
-      else {
+        this.start();
+      } else {
         // stop (pause) all timers
         this.stop();
         if (this.breakTimer) {
-           this.onBreak = false;
-            clearTimeout(this.breakTimer);
+          this.onBreak = false;
+          clearTimeout(this.breakTimer);
         }
         // else this.startStopBreak()
       }
     },
     startStopBreak() {
-      if(this.paused) this.start()
+      if (this.paused) this.start();
       if (this.onBreak) {
         // pause break
         this.onBreak = false;
         clearTimeout(this.breakTimer);
-      } else if(this.onBreak === false && !(this.breakLeft === 0) && (this.breakLeft < this.breakLength)){
+      } else if (
+        this.onBreak === false &&
+        !(this.breakLeft === 0) &&
+        this.breakLeft < this.breakLength
+      ) {
         this.onBreak = true;
         this.countdownBreak();
-      }
-      else {
+      } else {
         // pause break
         this.onBreak = true;
         this.breakLeft = this.breakLength;

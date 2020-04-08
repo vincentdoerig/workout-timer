@@ -16,14 +16,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Timer from '~/components/Timer.vue'
-import Logo from '~/components/Logo.vue'
+import Vue from 'vue';
+import Timer from '~/components/Timer.vue';
+import Logo from '~/components/Logo.vue';
 
 export default Vue.extend({
   components: {
     Timer,
-    Logo
-  }
-})
+    Logo,
+  },
+});
 </script>
