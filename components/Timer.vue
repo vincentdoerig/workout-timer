@@ -130,8 +130,8 @@
       </div>
     </section>
     <div v-if="debug" class="font-mono ml-2">
-      time in milliseconds: {{ time }} <br />
-      break time left in seconds: {{ breakLeft }}
+      time: {{ time / 1000 }} <br />
+      break time left: {{ breakLeft }}
     </div>
     <button
       class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3
@@ -175,6 +175,7 @@
               class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
               placeholder="90"
               type="number"
+              @keyup.enter="toggleSettings"
             />
             <div
               class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
@@ -213,6 +214,7 @@
 <script lang="ts">
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Component, Vue } from 'nuxt-property-decorator';
+
 @Component
 export default class Timer extends Vue {
   private settingsModalOpen: boolean = false;
@@ -317,9 +319,9 @@ export default class Timer extends Vue {
   public start(): void {
     this.paused = false;
     this.timer = setInterval(() => {
-      this.time += 100;
+      this.time += 1000;
       document.title = this.formattedElapsedTime;
-    }, 100);
+    }, 1000);
   }
 
   public stop(): void {
