@@ -41,6 +41,15 @@ export default {
    */
   modules: ['@nuxtjs/pwa'],
   /*
+   ** PWA Manifests
+   */
+  pwa: {
+    manifest: {
+      name: 'Workout Timer',
+      lang: 'en',
+    },
+  },
+  /*
    ** Build configuration
    */
   build: {

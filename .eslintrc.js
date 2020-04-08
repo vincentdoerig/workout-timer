@@ -16,6 +16,23 @@ module.exports = {
   rules: {
     'comma-dangle': ['error', 'always'],
     semi: ['error', 'always'],
-    quotes: ['error', 'single']
-  }
-}
+    quotes: ['error', 'single'],
+    'import/no-extraneous-dependencies': ['error', { peerDependencies: true }],
+    'import/no-unresolved': 'off',
+    'import/extensions': [
+      'error',
+      'always',
+      {
+        js: 'never',
+        vue: 'never',
+      },
+    ],
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.ts', '.vue'],
+      },
+    },
+  },
+};

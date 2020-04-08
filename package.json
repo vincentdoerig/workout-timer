@@ -25,6 +25,9 @@
     "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "prettier": "^1.19.1"
+    "nuxt-property-decorator": "^2.5.1",
+    "prettier": "^1.19.1",
+    "vuex-class": "^0.3.2",
+    "vuex-module-decorators": "^0.16.1"
   }
 }

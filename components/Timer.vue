@@ -185,111 +185,85 @@
   </main>
 </template>
 
-<script>
-import Vue from 'vue';
+<script lang="ts">
+/* eslint-disable import/no-extraneous-dependencies */
+import { Component, Vue, namespace } from 'nuxt-property-decorator';
+// import { State, Getter, Action, Mutation } from 'vuex-class';
 
-export default Vue.extend({
-  data() {
-    return {
-      settingsModalOpen: false,
-      paused: true,
-      onBreak: false,
-      time: 0,
-      timer: null,
-      breakLeft: 0,
-      breakLength: 90,
-      breakTimer: null,
-    };
-  },
-  computed: {
-    formattedElapsedTime() {
-      const date = new Date(null);
-      date.setSeconds(this.time / 1000);
-      const utc = date.toUTCString();
-      return utc.substr(utc.indexOf(':') - 2, 8);
-    },
-    formattedBreakTime() {
-      const date = new Date(null);
-      date.setSeconds(this.breakLeft);
-      const utc = date.toUTCString();
-      return utc.substr(utc.indexOf(':') - 2, 8);
-    },
-  },
-  destroyed() {
-    // save to local storage
-    //   if(this.timer)clearInterval(this.timer);
-    //  if(this.breakTimer) clearInteval(this.breakTimer)
-  },
-  methods: {
-    toggleSettings() {
-      this.settingsModalOpen = !this.settingsModalOpen;
-    },
-    startStop() {
-      if (!this.time || this.paused === true) {
-        // initial state --> start timer
-        this.start();
-      } else {
-        // stop (pause) all timers
-        this.stop();
-        if (this.breakTimer) {
-          this.onBreak = false;
-          clearTimeout(this.breakTimer);
-        }
-        // else this.startStopBreak()
-      }
-    },
-    startStopBreak() {
-      if (this.paused) this.start();
-      if (this.onBreak) {
-        // pause break
-        this.onBreak = false;
-        clearTimeout(this.breakTimer);
-      } else if (
-        this.onBreak === false &&
-        !(this.breakLeft === 0) &&
-        this.breakLeft < this.breakLength
-      ) {
-        this.onBreak = true;
-        this.countdownBreak();
-      } else {
-        // pause break
-        this.onBreak = true;
-        this.breakLeft = this.breakLength;
-        this.countdownBreak();
-      }
-    },
-    countdownBreak() {
-      if (this.time === 0) this.startStop();
+const sw = namespace('timer');
 
-      if (this.breakLeft > 0)
-        this.breakTimer = setTimeout(() => {
-          this.breakLeft -= 1;
-          this.countdownBreak();
-        }, 1000);
-      // break over
-      else this.onBreak = false;
-    },
-    resetBreak() {
-      this.breakLeft = 0;
-      this.onBreak = false;
-    },
-    start() {
-      this.paused = false;
-      this.timer = setInterval(() => {
-        this.time += 100;
-      }, 100);
-    },
-    stop() {
-      this.paused = true;
-      clearInterval(this.timer);
-    },
-    reset() {
-      this.time = 0;
-      this.paused = true;
-      this.timer = null;
-    },
-  },
-});
+@Component
+export default class Timer extends Vue {
+  @sw.State
+  public swState!: object;
+
+  @sw.Getter
+  public formattedElapsedTime!: string;
+
+  @sw.Action
+  public startStop!: () => void;
+
+  private settingsModalOpen: boolean = false;
+
+  private onBreak: boolean = false;
+
+  private breakLeft: number = 0;
+
+  private breakLength: number = 90;
+
+  private breakTimer: any = null;
+
+  private debug: boolean = false;
+
+  get formattedBreakTime(): string {
+    const date: Date = new Date(0);
+    date.setSeconds(this.breakLeft);
+    const utc: string = date.toUTCString();
+    return utc.substr(utc.indexOf(':') - 2, 8);
+  }
+
+  public toggleSettings(): void {
+    this.settingsModalOpen = !this.settingsModalOpen;
+  }
+
+  // public startStopBreak(): void {
+  //   if (this.paused) this.start();
+  //   if (this.onBreak) {
+  //     // pause break
+  //     this.onBreak = false;
+  //     clearTimeout(this.breakTimer);
+  //   } else if (
+  //     this.onBreak === false &&
+  //     !(this.breakLeft === 0) &&
+  //     this.breakLeft < this.breakLength
+  //   ) {
+  //     this.onBreak = true;
+  //     this.countdownBreak();
+  //   } else {
+  //     // pause break
+  //     this.onBreak = true;
+  //     this.breakLeft = this.breakLength;
+  //     this.countdownBreak();
+  //   }
+  // }
+
+  // public countdownBreak(): void {
+  //   if (this.time === 0) this.startStop();
+
+  //   if (this.breakLeft > 0)
+  //     // eslint-disable-next-line nonblock-statement-body-position
+  //     this.breakTimer = setTimeout(() => {
+  //       this.breakLeft -= 1;
+  //       this.countdownBreak();
+  //     }, 1000);
+  //   else this.onBreak = false; // break over
+  // }
+
+  // public resetBreak(): void {
+  //   this.breakLeft = 0;
+  //   this.onBreak = false;
+  // }
+}
 </script>
 
 <style>
