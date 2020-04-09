@@ -14,10 +14,11 @@ module.exports = {
   plugins: ['prettier'],
   // add your custom rules here
   rules: {
-    'comma-dangle': ['error', 'always'],
+    'comma-dangle': ['error', 'always-multiline'],
     semi: ['error', 'always'],
     quotes: ['error', 'single'],
     'import/no-extraneous-dependencies': ['error', { peerDependencies: true }],
     'import/no-unresolved': 'off',
+    curly: ['warn', 'multi', 'consistent'],
   },
 };
