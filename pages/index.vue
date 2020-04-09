@@ -1,14 +1,19 @@
 <template>
-  <div class="container mx-auto my-0">
-    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-extrabold text-center my-8">
-        Workout Timer
-      </h1>
-      <!-- <h2 class="subtitle">
+  <div
+    :class="[onBreak === true ? 'bg-green-700' : '']"
+    class="min-h-screen py-4"
+  >
+    <div class="container mx-auto my-0 rounded">
+      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-extrabold text-center my-8">
+          Workout Timer
+        </h1>
+        <!-- <h2 class="subtitle">
         An awesome timer for calisthenics.
       </h2> -->
+      </div>
+      <timer @break="onBreak = !onBreak" />
     </div>
-    <timer />
   </div>
 </template>
 
@@ -21,5 +26,7 @@ import Timer from '@/components/Timer.vue';
     Timer,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  onBreak: boolean = false;
+}
 </script>

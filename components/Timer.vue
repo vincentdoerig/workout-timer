@@ -2,13 +2,17 @@
   <main>
     <section class="flex flex-col justify-center items-center my-4">
       <div>
-        <h2 class="text-2xl text-teal-200 small-caps">Elapsed</h2>
+        <h2 class="sm:text-lg md:text-2xl text-teal-200 text-center small-caps">
+          Elapsed
+        </h2>
         <div class="font-mono stopwatch">
           {{ formattedElapsedTime }}
         </div>
       </div>
       <div>
-        <h2 class="text-xl text-teal-200 small-caps">Rest</h2>
+        <h2 class="sm:text-md md:text-xl text-teal-200 text-center small-caps">
+          Rest
+        </h2>
         <div class="font-mono countdown my-2">
           {{ formattedBreakTime }}
         </div>
@@ -31,6 +35,7 @@
           >
             <path
               d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
+              fill="none"
               stroke-miterlimit="10"
               stroke-width="32"
             />
@@ -227,7 +232,7 @@
 
 <script lang="ts">
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Component, Vue } from 'nuxt-property-decorator';
+import { Component, Vue, Watch } from 'nuxt-property-decorator';
 
 interface stopWatch {
   timer: any;
@@ -243,35 +248,35 @@ interface countdown {
 
 @Component
 export default class Timer extends Vue {
-  private settingsModalOpen: boolean = false;
+  settingsModalOpen: boolean = false;
 
-  public swState: stopWatch = {
+  swState: stopWatch = {
     timer: null,
     time: 0,
     state: 'paused',
   };
 
-  public cdState: countdown = {
+  cdState: countdown = {
     timer: null,
     timeLeft: 0,
     state: 'paused',
     breakLength: 90,
   };
 
-  private debug: boolean = false;
+  debug: boolean = false;
 
   get formattedElapsedTime(): string {
     const date: Date = new Date(0);
-    date.setSeconds(this.swState.time / 1000);
+    date.setSeconds(this.swState.time);
     const utc: string = date.toUTCString();
-    return utc.substr(utc.indexOf(':') - 2, 8);
+    return utc.substring(utc.indexOf(':') - 2, 25);
   }
 
   get formattedBreakTime(): string {
     const date: Date = new Date(0);
     date.setSeconds(this.cdState.timeLeft);
     const utc: string = date.toUTCString();
-    return utc.substr(utc.indexOf(':') - 2, 8);
+    return utc.substring(utc.indexOf(':') + 1, 25);
   }
 
   get bothRunning(): boolean {
@@ -288,6 +293,11 @@ export default class Timer extends Vue {
     return false;
   }
 
+  @Watch('cdState.state')
+  isOnBreak() {
+    this.$emit('break');
+  }
+
   // mounted(): void {
   //   // prettier-ignore
   //   if (localStorage.getItem('sw-time')){
@@ -299,11 +309,11 @@ export default class Timer extends Vue {
   //   localStorage.setItem('sw-time', JSON.stringify(this.time));
   // }
 
-  public toggleSettings(): void {
+  toggleSettings(): void {
     this.settingsModalOpen = !this.settingsModalOpen;
   }
 
-  public startStop(): void {
+  startStop(): void {
     // initial state --> start timer
     if (!this.swState.timer || this.swState.state === 'paused') {
       this.startSW();
@@ -315,7 +325,7 @@ export default class Timer extends Vue {
     }
   }
 
-  public startStopBreak(): void {
+  startStopBreak(): void {
     if (this.cdState.timeLeft > 0) {
       // break timer already running
       if (this.bothPaused) {
@@ -337,32 +347,32 @@ export default class Timer extends Vue {
     }
   }
 
-  public startSW(): void {
+  startSW(): void {
     this.swState.state = 'running';
     this.swState.timer = setInterval(() => {
-      this.swState.time += 1000;
+      this.swState.time += 1;
       document.title = this.formattedElapsedTime;
     }, 1000);
   }
 
-  public stopSW(): void {
+  stopSW(): void {
     this.swState.state = 'paused';
     clearInterval(this.swState.timer);
     document.title = `${document.title} (stopped)`;
   }
 
-  public resetSW(): void {
+  resetSW(): void {
     this.swState.time = 0;
     this.swState.state = 'paused';
     this.swState.timer = null;
   }
 
-  public startCD(): void {
+  startCD(): void {
     this.cdState.timeLeft = this.cdState.breakLength;
     this.startCDRecursion();
   }
 
-  public startCDRecursion(): void {
+  startCDRecursion(): void {
     // prettier-ignore eslint-ignore
     this.cdState.state = 'running';
     this.cdState.timer = setInterval(() => {
@@ -371,12 +381,12 @@ export default class Timer extends Vue {
     }, 1000);
   }
 
-  public stopCD(): void {
+  stopCD(): void {
     this.cdState.state = 'paused';
     clearTimeout(this.cdState.timer);
   }
 
-  public resetCD(): void {
+  resetCD(): void {
     this.cdState.timeLeft = 0;
     this.cdState.state = 'paused';
   }
@@ -392,7 +402,11 @@ export default class Timer extends Vue {
 }
 .small-caps {
   font-feature-settings: 'smcp';
-  margin-bottom: -1.5rem;
+}
+@media (min-width: 768px) {
+  .small-caps {
+    margin-bottom: -1.5rem;
+  }
 }
 /* removes the arrows next to the number input */
 input[type='number'] {
