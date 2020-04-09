@@ -5,3 +5,9 @@
     <nuxt />
   </div>
 </template>
+
+<style>
+html {
+  padding: env(safe-area-inset);
+}
+</style>

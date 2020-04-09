@@ -193,7 +193,8 @@
               v-model="cdState.breakLength"
               class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
               placeholder="90"
-              type="number"
+              pattern="[0-9]*"
+              type="text"
               @keyup.enter="toggleSettings"
             />
             <div
