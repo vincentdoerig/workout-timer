@@ -2,7 +2,9 @@
   <main>
     <section class="flex flex-col justify-center items-center my-4">
       <div>
-        <h2 class="sm:text-lg md:text-2xl text-teal-200 text-center small-caps">
+        <h2
+          class="sm:text-lg md:text-2xl lg:text-3xl text-teal-200 text-center small-caps"
+        >
           Elapsed
         </h2>
         <div class="font-mono stopwatch">
@@ -10,10 +12,12 @@
         </div>
       </div>
       <div>
-        <h2 class="sm:text-md md:text-xl text-teal-200 text-center small-caps">
+        <h2
+          class="sm:text-md md:text-xl lg:text-2xl text-teal-200 text-center small-caps"
+        >
           Rest
         </h2>
-        <div class="font-mono countdown my-2">
+        <div class="font-mono countdown">
           {{ formattedBreakTime }}
         </div>
       </div>
@@ -24,7 +28,7 @@
         <button
           class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
           leading-6 font-medium text-white hover:bg-gray-800 transition
-          ease-in-out duration-150"
+          ease-in-out duration-150 focus:outline-none focus:bg-black"
           @click="startStop"
         >
           <svg
@@ -79,7 +83,7 @@
         <div class="flex flex-col items-start">
           <button
             class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
-          leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150"
+          leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-black"
             @click="startStopBreak"
           >
             <svg
@@ -120,7 +124,7 @@
           <button
             v-if="cdState.state === 'paused' && cdState.timeLeft > 0"
             class="flex mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
-          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150 mt-4"
+          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-black"
             @click="resetCD"
           >
             <svg
@@ -149,12 +153,35 @@
       </div>
     </section>
     <div v-if="debug" class="font-mono ml-2">
-      time: {{ swState.time / 1000 }} <br />
+      time: {{ swState.time }} <br />
       break time left: {{ cdState.timeLeft }}
     </div>
     <button
       class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3
-      rounded-lg mr-4 mb-4 hover:bg-gray-800"
+      rounded-lg mr-32 mb-4 md:mr-4 md:mb-32 hover:bg-gray-800 focus:outline-none focus:bg-black"
+      :title="muted ? 'Click to unmute' : 'Click to mute'"
+      @click="toggleSound"
+    >
+      <svg v-if="muted" fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8">
+        <path
+          fill-rule="evenodd"
+          d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+
+      <svg v-else fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8">
+        <path
+          fill-rule="evenodd"
+          d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+    </button>
+    <button
+      class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3
+      rounded-lg mr-4 mb-4 hover:bg-gray-800 focus:outline-none focus:bg-black"
+      title="Open settings"
       @click="toggleSettings"
     >
       <svg fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8 cog">
@@ -176,10 +203,12 @@
     <transition name="slide">
       <aside
         v-if="settingsModalOpen"
-        class="absolute bottom-0 left-0 w-full bg-gray-600 text-white
-        rounded-t-md max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 overflow-hidden"
+        class="fixed bottom-0 left-0 w-full bg-gray-700 text-white
+        rounded-t-lg max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 overflow-hidden"
       >
-        <h2 class="text-2xl font-bold mb-2 mt-1">Settings</h2>
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 mt-1">
+          Settings
+        </h2>
 
         <div>
           <label
@@ -187,38 +216,54 @@
             class="block text-sm leading-5 font-medium text-gray-200"
             >Break time</label
           >
-          <div class="mt-1 relative">
-            <input
-              id="break"
-              v-model="cdState.breakLength"
-              class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
-              placeholder="90"
-              pattern="[0-9]*"
-              type="text"
-              @keyup.enter="toggleSettings"
-            />
-            <div
-              class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
-            >
-              <span class="text-gray-400 text-sm leading-5">
-                seconds
-              </span>
+          <div class="mt-1">
+            <div class="relative">
+              <input
+                id="break"
+                v-model="cdState.breakLength"
+                class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
+                :class="error ? 'border border-red-500' : ''"
+                placeholder="90"
+                pattern="[0-9]*"
+                type="text"
+                @keyup.enter="toggleSettings"
+              />
+              <div
+                class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+              >
+                <span class="text-gray-400 text-sm leading-5">
+                  seconds
+                </span>
+              </div>
             </div>
+            <p v-if="error" class="text-red-500 text-xs italic">
+              Please choose a valid break time.
+            </p>
           </div>
           <div class="my-4">
-            <label for="debug">Debug mode</label>
-            <input
-              id="debug"
-              type="checkbox"
-              name="debug"
-              class="text-sm leading-5 font-medium text-gray-200"
-              @click="debug = !debug"
-            />
+            <label for="title">
+              <input
+                id="title"
+                type="checkbox"
+                name="title"
+                @click="$emit('showTitle')"
+              /><span class="text-gray-100 ml-2">Show Title</span></label
+            >
+          </div>
+          <div class="my-4">
+            <label for="debug">
+              <input
+                id="debug"
+                type="checkbox"
+                name="debug"
+                @click="debug = !debug"
+              /><span class="text-gray-100 ml-2">Debug mode</span></label
+            >
           </div>
         </div>
         <button
-          class="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex
-          items-center justify-center px-6 py-3 border border-transparent
+          class="mt-4 w-full md:w-1/6
+          px-6 py-3 border border-green-600
           text-base leading-6 font-semibold rounded-md text-white
           bg-green-500 shadow-sm hover:bg-green-700
           focus:outline-none focus:bg-green-700 transition ease-in-out duration-150"
@@ -234,6 +279,7 @@
 <script lang="ts">
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
+import { Howl } from 'howler';
 
 interface stopWatch {
   timer: any;
@@ -265,6 +311,10 @@ export default class Timer extends Vue {
   };
 
   debug: boolean = false;
+
+  muted: boolean = true;
+
+  error: boolean = false;
 
   get formattedElapsedTime(): string {
     const date: Date = new Date(0);
@@ -299,19 +349,31 @@ export default class Timer extends Vue {
     this.$emit('break');
   }
 
-  // mounted(): void {
-  //   // prettier-ignore
-  //   if (localStorage.getItem('sw-time')){
-  // this.time = Number(JSON.parse(localStorage.getItem('sw-time')))
-  // };
-  // }
-
-  // destroy(): void {
-  //   localStorage.setItem('sw-time', JSON.stringify(this.time));
-  // }
+  mounted(): void {
+    if (localStorage.muted) this.muted = localStorage.muted === 'true';
+    if (localStorage.breakLength)
+      this.cdState.breakLength = parseInt(localStorage.breakLength);
+  }
 
   toggleSettings(): void {
+    if (
+      isNaN(this.cdState.breakLength) ||
+      this.cdState.breakLength < 1 ||
+      this.cdState.breakLength > 3600
+    ) {
+      // return an error if the input isn't a number, and not bigger than 3600 (1 hour --> max countdown value)
+      this.error = true;
+      return;
+    }
     this.settingsModalOpen = !this.settingsModalOpen;
+    if (!this.settingsModalOpen)
+      // only save when settings are closed
+      localStorage.setItem('breakLength', this.cdState.breakLength.toString());
+  }
+
+  toggleSound(): void {
+    this.muted = !this.muted;
+    localStorage.setItem('muted', this.muted.toString());
   }
 
   startStop(): void {
@@ -374,11 +436,31 @@ export default class Timer extends Vue {
   }
 
   startCDRecursion(): void {
-    // prettier-ignore eslint-ignore
     this.cdState.state = 'running';
+    const endSound = new Howl({
+      src: ['./bong.mp3', './bong.wav'],
+      // volume: 0.5,
+      autoplay: false,
+    });
+    const beep = new Howl({
+      src: './beep.wav',
+      // volume: 0.5,
+      autoplay: false,
+    });
     this.cdState.timer = setInterval(() => {
       this.cdState.timeLeft -= 1;
-      if (this.cdState.timeLeft <= 0) this.stopCD(); // countdown finished
+      if (
+        !this.muted &&
+        this.cdState.timeLeft <= 5 &&
+        this.cdState.timeLeft > 0
+      )
+        beep.play();
+
+      if (this.cdState.timeLeft <= 0) {
+        // countdown finished
+        this.stopCD();
+        if (!this.muted) endSound.play();
+      }
     }, 1000);
   }
 
@@ -396,10 +478,12 @@ export default class Timer extends Vue {
 
 <style>
 .stopwatch {
-  font-size: 10vw;
+  font-size: 19.5vw;
+  margin: -5vw 0;
 }
 .countdown {
-  font-size: 8vw;
+  font-size: 18vw;
+  margin: -4vw 0;
 }
 .small-caps {
   font-feature-settings: 'smcp';
@@ -408,15 +492,6 @@ export default class Timer extends Vue {
   .small-caps {
     margin-bottom: -1.5rem;
   }
-}
-/* removes the arrows next to the number input */
-input[type='number'] {
-  -moz-appearance: textfield;
-}
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 /* Settings Modal Transition */
 .slide-enter-active,
