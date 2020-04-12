@@ -438,12 +438,12 @@ export default class Timer extends Vue {
   startCDRecursion(): void {
     this.cdState.state = 'running';
     const endSound = new Howl({
-      src: ['./bong.mp3', './bong.wav'],
+      src: ['./sounds/bong.mp3', './sounds/bong.wav'],
       // volume: 0.5,
       autoplay: false,
     });
     const beep = new Howl({
-      src: './beep.wav',
+      src: './sounds/beep.wav',
       // volume: 0.5,
       autoplay: false,
     });
