@@ -204,7 +204,7 @@
       <aside
         v-if="settingsModalOpen"
         class="fixed bottom-0 left-0 w-full bg-gray-700 text-white
-        rounded-t-lg max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 overflow-hidden"
+        rounded-t-lg max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 overflow-hidden z-20"
       >
         <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 mt-1">
           Settings
@@ -496,12 +496,11 @@ export default class Timer extends Vue {
 /* Settings Modal Transition */
 .slide-enter-active,
 .slide-leave-active {
-  transition: height 0.25s ease-in-out;
-  height: 190px;
+  transition: transform 0.25s ease-in-out;
 }
 
 .slide-enter,
 .slide-leave-to {
-  height: 0;
+  transform: translateY(400px);
 }
 </style>

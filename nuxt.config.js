@@ -18,7 +18,30 @@ export default {
           'A simple stopwatch with a customisable break timer. A perfect addition to your workout.',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'mask-icon',
+        href: '/safari-pinned-tab.svg',
+        color: '#1a202c',
+      },
+    ],
     script: [
       {
         src: 'https://cdn.simpleanalytics.io/hello.js',
@@ -67,6 +90,14 @@ export default {
      ** You can extend webpack config here
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    extend(config, ctx) {},
+    extend(config, ctx) {
+      config.module.rules.push({
+        test: /\.(ogg|mp3|wav|mpe?g)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+      });
+    },
   },
 };
