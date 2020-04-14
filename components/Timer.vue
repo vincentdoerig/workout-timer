@@ -323,6 +323,9 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
 import { Howl } from 'howler';
+const beepWav = require('@/static/sounds/beep.wav');
+const bongWav = require('@/static/sounds/bong.wav');
+const bongMp3 = require('@/static/sounds/bong.mp3');
 
 interface stopWatch {
   timer: any;
@@ -485,12 +488,12 @@ export default class Timer extends Vue {
   startCDRecursion(): void {
     this.cdState.state = 'running';
     const endSound = new Howl({
-      src: ['./sounds/bong.mp3', './sounds/bong.wav'],
+      src: [bongMp3, bongWav],
       // volume: 0.5,
       autoplay: false,
     });
     const beep = new Howl({
-      src: './sounds/beep.wav',
+      src: beepWav,
       // volume: 0.5,
       autoplay: false,
     });
