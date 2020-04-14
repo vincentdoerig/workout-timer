@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <section class="flex flex-col justify-center items-center my-4">
+  <section>
+    <main class="flex flex-col justify-center items-center my-4">
       <div>
         <h2
           class="sm:text-lg md:text-2xl lg:text-3xl text-teal-200 text-center small-caps"
@@ -22,13 +22,10 @@
         </div>
       </div>
       <div
-        class="flex flex-row flex-wrap justify-evenly
-      items-start w-full mt-4"
+        class="flex flex-row flex-wrap justify-evenly items-start w-full mt-4"
       >
         <button
-          class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
-          leading-6 font-medium text-white hover:bg-gray-800 transition
-          ease-in-out duration-150 focus:outline-none focus:bg-black"
+          class="flex rounded-md border border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-black"
           @click="startStop"
         >
           <svg
@@ -82,8 +79,7 @@
         </button>
         <div class="flex flex-col items-start">
           <button
-            class="flex rounded-md border border-teal-400 px-5 py-4 text-lg
-          leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-black"
+            class="flex rounded-md border border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-black"
             @click="startStopBreak"
           >
             <svg
@@ -123,8 +119,7 @@
           </button>
           <button
             v-if="cdState.state === 'paused' && cdState.timeLeft > 0"
-            class="flex mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm
-          leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-black"
+            class="flex mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-black"
             @click="resetCD"
           >
             <svg
@@ -151,43 +146,43 @@
           </button>
         </div>
       </div>
-    </section>
-    <div v-if="debug" class="font-mono ml-2">
-      time: {{ swState.time }} <br />
-      break time left: {{ cdState.timeLeft }}
-    </div>
-    <button
-      class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3
-      rounded-lg mr-32 mb-4 md:mr-4 md:mb-32 hover:bg-gray-800 focus:outline-none focus:bg-black"
-      :title="muted ? 'Click to unmute' : 'Click to mute'"
-      @click="toggleSound"
-    >
-      <svg v-if="muted" fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8">
-        <path
-          fill-rule="evenodd"
-          d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"
-          clip-rule="evenodd"
-        ></path>
-      </svg>
+    </main>
+    <section>
+      <button
+        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-32 mb-4 md:mr-4 md:mb-32 hover:bg-gray-800 focus:outline-none focus:bg-black"
+        :title="muted ? 'Click to unmute' : 'Click to mute'"
+        @click="toggleSound"
+      >
+        <svg
+          v-if="muted"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          class="w-8 h-8"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
 
-      <svg v-else fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8">
-        <path
-          fill-rule="evenodd"
-          d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
-          clip-rule="evenodd"
-        ></path>
-      </svg>
-    </button>
-    <button
-      class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3
-      rounded-lg mr-4 mb-4 hover:bg-gray-800 focus:outline-none focus:bg-black"
-      title="Open settings"
-      @click="toggleSettings"
-    >
-      <svg fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8 cog">
-        <path
-          fill-rule="evenodd"
-          d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0
+        <svg v-else fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8">
+          <path
+            fill-rule="evenodd"
+            d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+      <button
+        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-4 mb-4 hover:bg-gray-800 focus:outline-none focus:bg-black"
+        title="Open settings"
+        @click="toggleSettings"
+      >
+        <svg fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8 cog">
+          <path
+            fill-rule="evenodd"
+            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0
           01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061
           2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0
           01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0
@@ -196,88 +191,136 @@
           01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0
           01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532
           1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-          clip-rule="evenodd"
-        ></path>
-      </svg>
-    </button>
-    <transition name="slide">
-      <aside
-        v-if="settingsModalOpen"
-        class="fixed bottom-0 left-0 w-full bg-gray-700 text-white
-        rounded-t-lg max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 overflow-hidden z-20"
-      >
-        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 mt-1">
-          Settings
-        </h2>
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+    </section>
+    <transition
+      enter-active-class="ease-out duration-300"
+      enter-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="ease-in duration-200"
+      leave-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div v-if="settingsModalOpen" class="fixed inset-0 transition-opacity">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+    </transition>
 
-        <div>
-          <label
-            for="break"
-            class="block text-sm leading-5 font-medium text-gray-200"
-            >Break time</label
-          >
-          <div class="mt-1">
-            <div class="relative">
-              <input
-                id="break"
-                v-model="cdState.breakLength"
-                class="sm:text-sm sm:leading-5 bg-gray-800 w-32 pr-16 pl-2 py-1 rounded"
-                :class="error ? 'border border-red-500' : ''"
-                placeholder="90"
-                pattern="[0-9]*"
-                type="text"
-                @keyup.enter="toggleSettings"
-              />
-              <div
-                class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+    <transition
+      enter-active-class="ease-out duration-300"
+      enter-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      enter-to-class="opacity-100 translate-y-0 sm:scale-100"
+      leave-active-class="ease-in duration-200"
+      leave-class="opacity-100 translate-y-0 sm:scale-100"
+      leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+    >
+      <div
+        v-if="settingsModalOpen"
+        class="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
+      >
+        <div
+          class="bg-white rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:p-6"
+        >
+          <div class="sm:flex sm:items-start">
+            <div
+              class="hidden sm:flex mx-auto flex-shrink-0 items-center justify-center h-12 w-12 rounded-full bg-gray-200 sm:mx-0 sm:h-10 sm:w-10"
+            >
+              <svg
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                class="w-6 h-6 text-gray-600"
               >
-                <span class="text-gray-400 text-sm leading-5">
-                  seconds
-                </span>
+                <path
+                  fill-rule="evenodd"
+                  d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            <div class="mt-0 sm:ml-4">
+              <h3 class="text-xl leading-6 font-medium text-gray-900">
+                Settings
+              </h3>
+              <div class="mt-2">
+                <div>
+                  <label
+                    for="break"
+                    class="block text-sm leading-5 font-medium text-gray-800"
+                    >Break time</label
+                  >
+                  <div class="mt-1">
+                    <div class="relative">
+                      <input
+                        id="break"
+                        v-model.lazy="cdState.breakLength"
+                        class="appearance-none focus:shadow-outline sm:text-sm sm:leading-5 bg-gray-200 text-gray-900 w-32 pr-16 pl-2 py-1 rounded"
+                        :class="error ? 'border border-red-500' : ''"
+                        placeholder="90"
+                        pattern="[0-9]*"
+                        type="text"
+                        @keyup.enter="toggleSettings"
+                      />
+                      <div
+                        class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+                      >
+                        <span class="text-gray-700 text-sm leading-5">
+                          seconds
+                        </span>
+                      </div>
+                    </div>
+                    <p v-if="error" class="text-red-500 text-xs italic">
+                      Please choose a valid break time.
+                    </p>
+                  </div>
+                  <div class="my-4">
+                    <label for="title" class="inline-flex items-center">
+                      <input
+                        id="title"
+                        type="checkbox"
+                        name="title"
+                        class="form-checkbox text-teal-500"
+                        @click="$emit('showTitle')"
+                      /><span class="text-base leading-6 text-gray-800 ml-2"
+                        >Show Title</span
+                      ></label
+                    >
+                  </div>
+                </div>
               </div>
             </div>
-            <p v-if="error" class="text-red-500 text-xs italic">
-              Please choose a valid break time.
-            </p>
           </div>
-          <div class="my-4">
-            <label for="title">
-              <input
-                id="title"
-                type="checkbox"
-                name="title"
-                @click="$emit('showTitle')"
-              /><span class="text-gray-100 ml-2">Show Title</span></label
+          <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+            <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                @click="toggleSettings"
+              >
+                Save
+              </button>
+            </span>
+            <span
+              class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
             >
-          </div>
-          <div class="my-4">
-            <label for="debug">
-              <input
-                id="debug"
-                type="checkbox"
-                name="debug"
-                @click="debug = !debug"
-              /><span class="text-gray-100 ml-2">Debug mode</span></label
-            >
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                @click="cancelSettings"
+              >
+                Cancel
+              </button>
+            </span>
           </div>
         </div>
-        <button
-          class="mt-4 w-full md:w-1/6
-          px-6 py-3 border border-green-600
-          text-base leading-6 font-semibold rounded-md text-white
-          bg-green-500 shadow-sm hover:bg-green-700
-          focus:outline-none focus:bg-green-700 transition ease-in-out duration-150"
-          @click="toggleSettings"
-        >
-          Save
-        </button>
-      </aside>
+      </div>
     </transition>
-  </main>
+  </section>
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
 import { Howl } from 'howler';
 
@@ -309,8 +352,6 @@ export default class Timer extends Vue {
     state: 'paused',
     breakLength: 90,
   };
-
-  debug: boolean = false;
 
   muted: boolean = true;
 
@@ -365,10 +406,16 @@ export default class Timer extends Vue {
       this.error = true;
       return;
     }
+    this.error = false;
     this.settingsModalOpen = !this.settingsModalOpen;
     if (!this.settingsModalOpen)
       // only save when settings are closed
       localStorage.setItem('breakLength', this.cdState.breakLength.toString());
+  }
+
+  cancelSettings(): void {
+    this.cdState.breakLength = parseInt(localStorage.breakLength) || 90;
+    this.settingsModalOpen = !this.settingsModalOpen;
   }
 
   toggleSound(): void {
@@ -492,15 +539,5 @@ export default class Timer extends Vue {
   .small-caps {
     margin-bottom: -1.5rem;
   }
-}
-/* Settings Modal Transition */
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.25s ease-in-out;
-}
-
-.slide-enter,
-.slide-leave-to {
-  transform: translateY(400px);
 }
 </style>
