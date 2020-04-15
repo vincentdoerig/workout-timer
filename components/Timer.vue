@@ -222,7 +222,7 @@
         class="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
       >
         <div
-          class="bg-white rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full sm:p-6"
+          class="bg-white rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
         >
           <div class="sm:flex sm:items-start">
             <div
@@ -240,53 +240,102 @@
                 ></path>
               </svg>
             </div>
-            <div class="mt-0 sm:ml-4">
-              <h3 class="text-xl leading-6 font-medium text-gray-900">
-                Settings
-              </h3>
-              <div class="mt-2">
+            <div class="mt-0 sm:ml-4 lg:ml-8">
+              <div class="sm:flex sm:flex-row">
                 <div>
-                  <label
-                    for="break"
-                    class="block text-sm leading-5 font-medium text-gray-800"
-                    >Break time</label
-                  >
-                  <div class="mt-1">
-                    <div class="relative">
-                      <input
-                        id="break"
-                        v-model.lazy="cdState.breakLength"
-                        class="appearance-none focus:shadow-outline sm:text-sm sm:leading-5 bg-gray-200 text-gray-900 w-32 pr-16 pl-2 py-1 rounded"
-                        :class="error ? 'border border-red-500' : ''"
-                        placeholder="90"
-                        pattern="[0-9]*"
-                        type="text"
-                        @keyup.enter="toggleSettings"
-                      />
-                      <div
-                        class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+                  <h3 class="text-xl leading-6 font-medium text-gray-900">
+                    Settings
+                  </h3>
+                  <div class="mt-2">
+                    <div>
+                      <label
+                        for="break"
+                        class="block text-sm leading-5 font-medium text-gray-800"
+                        >Break time</label
                       >
-                        <span class="text-gray-700 text-sm leading-5">
-                          seconds
-                        </span>
+                      <div class="mt-1">
+                        <div class="relative">
+                          <input
+                            id="break"
+                            v-model.lazy="cdState.breakLength"
+                            class="appearance-none focus:shadow-outline sm:text-sm sm:leading-5 bg-gray-200 text-gray-900 w-32 pr-16 pl-2 py-1 rounded"
+                            :class="error ? 'border border-red-500' : ''"
+                            placeholder="90"
+                            pattern="[0-9]*"
+                            type="text"
+                            @keyup.enter="toggleSettings"
+                          />
+                          <div
+                            class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+                          >
+                            <span class="text-gray-700 text-sm leading-5">
+                              seconds
+                            </span>
+                          </div>
+                        </div>
+                        <p v-if="error" class="text-red-500 text-xs italic">
+                          Please choose a valid break time.
+                        </p>
+                      </div>
+                      <div class="my-4">
+                        <label for="title" class="inline-flex items-center">
+                          <input
+                            id="title"
+                            type="checkbox"
+                            name="title"
+                            class="form-checkbox text-teal-500"
+                            @click="$emit('showTitle')"
+                          /><span class="text-base leading-6 text-gray-800 ml-2"
+                            >Show Title</span
+                          ></label
+                        >
                       </div>
                     </div>
-                    <p v-if="error" class="text-red-500 text-xs italic">
-                      Please choose a valid break time.
-                    </p>
                   </div>
-                  <div class="my-4">
-                    <label for="title" class="inline-flex items-center">
-                      <input
-                        id="title"
-                        type="checkbox"
-                        name="title"
-                        class="form-checkbox text-teal-500"
-                        @click="$emit('showTitle')"
-                      /><span class="text-base leading-6 text-gray-800 ml-2"
-                        >Show Title</span
-                      ></label
-                    >
+                </div>
+                <div class="sm:ml-8 lg:ml-16 text-sm hidden sm:block">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Keyboard Shortcuts
+                  </h3>
+                  <div class="my-2 text-gray-800">
+                    <div class="leading-7">
+                      Start/stop:
+                      <kbd
+                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        >space</kbd
+                      >
+                      or
+                      <kbd
+                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        >enter</kbd
+                      >
+                      or
+                      <kbd
+                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        >s</kbd
+                      >
+                    </div>
+                    <div class="leading-7">
+                      Start/stop break:
+                      <kbd
+                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        >b</kbd
+                      >
+                    </div>
+                    <div class="leading-7">
+                      Reset timer:
+                      <kbd
+                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        >r</kbd
+                      >
+                    </div>
+                    <div class="leading-7">
+                      Toggle sound:
+                      <kbd
+                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        >m</kbd
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -397,6 +446,23 @@ export default class Timer extends Vue {
     if (localStorage.muted) this.muted = localStorage.muted === 'true';
     if (localStorage.breakLength)
       this.cdState.breakLength = parseInt(localStorage.breakLength);
+    window.addEventListener('keydown', this.handleShortcut);
+  }
+
+  destroyed(): void {
+    window.removeEventListener('keydown', this.handleShortcut);
+  }
+
+  handleShortcut(e: KeyboardEvent): void {
+    if (
+      !this.settingsModalOpen &&
+      (e.keyCode === 32 || e.key === 's' || e.key === 'Enter')
+    )
+      this.startStop();
+    if (e.key === 'b') this.startStopBreak();
+    if (e.key === 'm') this.toggleSound();
+    if (e.key === 'r') this.resetSW();
+    if (e.key === 'Escape' && this.settingsModalOpen) this.cancelSettings();
   }
 
   toggleSettings(): void {
@@ -475,6 +541,7 @@ export default class Timer extends Vue {
   }
 
   resetSW(): void {
+    if (this.swState.state === 'running') this.startStop();
     this.swState.time = 0;
     this.swState.state = 'paused';
     this.swState.timer = null;
