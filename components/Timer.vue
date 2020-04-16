@@ -24,59 +24,80 @@
       <div
         class="flex flex-row flex-wrap justify-evenly items-start w-full mt-4"
       >
-        <button
-          class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
-          @click="startStop"
-        >
-          <svg
-            v-if="swState.state === 'running'"
-            stroke="currentColor"
-            viewBox="0 0 512 528"
-            class="mr-3 h-6 w-6"
+        <div class="flex flex-col items-start">
+          <button
+            class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+            @click="startStop"
           >
-            <path
-              d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
-              fill="none"
-              stroke-miterlimit="10"
-              stroke-width="32"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-miterlimit="10"
-              stroke-width="32"
-              d="M208 192v128M304 192v128"
-            />
-          </svg>
-          <svg
-            v-else
-            stroke="currentColor"
-            viewBox="0 0 512 528"
-            class="mr-3 h-6 w-6"
-          >
-            <path
-              d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
-              fill="none"
+            <svg
+              v-if="swState.state === 'running'"
               stroke="currentColor"
-              stroke-miterlimit="10"
-              stroke-width="32"
-            />
-            <path
-              d="M216.32 334.44l114.45-69.14a10.89 10.89 0
+              viewBox="0 0 512 528"
+              class="mr-3 h-6 w-6"
+            >
+              <path
+                d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
+                fill="none"
+                stroke-miterlimit="10"
+                stroke-width="32"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-miterlimit="10"
+                stroke-width="32"
+                d="M208 192v128M304 192v128"
+              />
+            </svg>
+            <svg
+              v-else
+              stroke="currentColor"
+              viewBox="0 0 512 528"
+              class="mr-3 h-6 w-6"
+            >
+              <path
+                d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
+                fill="none"
+                stroke="currentColor"
+                stroke-miterlimit="10"
+                stroke-width="32"
+              />
+              <path
+                d="M216.32 334.44l114.45-69.14a10.89 10.89 0
               000-18.6l-114.45-69.14a10.78 10.78 0 00-16.32
               9.31v138.26a10.78 10.78 0 0016.32 9.31z"
+                fill="currentColor"
+              />
+            </svg>
+            <p>
+              {{
+                swState.state === 'paused'
+                  ? !swState.time
+                    ? 'Start'
+                    : 'Resume'
+                  : 'Pause'
+              }}
+            </p>
+          </button>
+          <button
+            v-if="swState.state === 'paused' && swState.time > 0"
+            class="flex mr-4 rounded-md border border-teal-600 dark:border-teal-400 px-2 py-1 text-sm leading-8 text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+            @click="resetSW"
+          >
+            <svg
               fill="currentColor"
-            />
-          </svg>
-          <p>
-            {{
-              swState.state === 'paused'
-                ? !swState.time
-                  ? 'Start'
-                  : 'Resume'
-                : 'Pause'
-            }}
-          </p>
-        </button>
+              viewBox="0 0 20 20"
+              class="mr-3 mt-2 h-4 w-4"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            Reset
+          </button>
+        </div>
+
         <div class="flex flex-col items-start">
           <button
             class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"

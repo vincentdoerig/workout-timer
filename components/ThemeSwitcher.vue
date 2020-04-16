@@ -3,7 +3,7 @@
     <h3 class="text-base leading-6 text-gray-800">
       Theme
     </h3>
-    <div class="flex flex-row">
+    <div class="flex flex-row mt-2">
       <input
         id="dark-mode"
         name="form-input push_notifications"
@@ -11,10 +11,16 @@
         class="hidden"
         @click="$colorMode.preference = 'dark'"
       />
-      <label for="dark-mode" class="hover:shadow-md cursor-pointer">
+      <label
+        for="dark-mode"
+        tabindex="0"
+        class="hover:shadow-md cursor-pointer focus:shadow-md rounded focus:shadow-outline"
+        @keydown.enter="$colorMode.preference = 'dark'"
+        @keydown.space="$colorMode.preference = 'dark'"
+      >
         <p class="sr-only">Dark mode</p>
         <div
-          class="w-8 h-8 bg-gray-800 rounded border-2 "
+          class="w-8 h-8 bg-gray-800 rounded border-2"
           :class="$colorMode.value === 'dark' ? 'border-teal-700 border-3' : ''"
         ></div>
       </label>
@@ -27,12 +33,14 @@
       />
       <label
         for="light-mode"
-        class="ml-3 hover:shadow-md cursor-pointer
-"
+        tabindex="0"
+        class="ml-3 hover:shadow-md cursor-pointer focus:shadow-md rounded focus:shadow-outline"
+        @keydown.enter="$colorMode.preference = 'light'"
+        @keydown.space="$colorMode.preference = 'light'"
       >
         <p class="sr-only">Light mode</p>
         <div
-          class="w-8 h-8 bg-gray-200 rounded border-2 "
+          class="w-8 h-8 bg-gray-200 rounded border-2"
           :class="
             $colorMode.value === 'light' ? 'border-teal-700 border-3' : ''
           "
