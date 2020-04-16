@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[onBreak === true ? 'bg-green-700' : '']"
+    :class="[onBreak === true ? 'bg-green-300 dark:bg-green-700' : '']"
     class="min-h-screen py-4"
   >
     <div class="container mx-auto my-0 rounded">

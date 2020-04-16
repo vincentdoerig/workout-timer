@@ -3,7 +3,7 @@
     <main class="flex flex-col justify-center items-center my-4">
       <div>
         <h2
-          class="sm:text-lg md:text-2xl lg:text-3xl text-teal-200 text-center small-caps"
+          class="sm:text-lg md:text-2xl lg:text-3xl text-teal-900 dark:text-teal-200 text-center small-caps"
         >
           Elapsed
         </h2>
@@ -13,7 +13,7 @@
       </div>
       <div>
         <h2
-          class="sm:text-md md:text-xl lg:text-2xl text-teal-200 text-center small-caps"
+          class="sm:text-md md:text-xl lg:text-2xl text-teal-900 dark:text-teal-200 text-center small-caps"
         >
           Rest
         </h2>
@@ -25,7 +25,7 @@
         class="flex flex-row flex-wrap justify-evenly items-start w-full mt-4"
       >
         <button
-          class="flex rounded-md border border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-black"
+          class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
           @click="startStop"
         >
           <svg
@@ -79,7 +79,7 @@
         </button>
         <div class="flex flex-col items-start">
           <button
-            class="flex rounded-md border border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-white hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-black"
+            class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="startStopBreak"
           >
             <svg
@@ -93,7 +93,7 @@
               95.8-172.94c2-18.78-13.61-35.06-33.41-35.06H145.61c-19.8
               0-35.37 16.28-33.41 35.06C124.89 205 208 201 208 256s-82.06
               52-95.8 172.94c-2.14 18.77 13.61 35.06 33.41 35.06z"
-                fill="currentColor"
+                fill="white"
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -119,7 +119,7 @@
           </button>
           <button
             v-if="cdState.state === 'paused' && cdState.timeLeft > 0"
-            class="flex mr-4 rounded-md border border-teal-400 px-2 py-1 text-sm leading-8 text-white hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-black"
+            class="flex mr-4 rounded-md border border-teal-600 dark:border-teal-400 px-2 py-1 text-sm leading-8 text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetCD"
           >
             <svg
@@ -149,7 +149,7 @@
     </main>
     <section>
       <button
-        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-32 mb-4 md:mr-4 md:mb-32 hover:bg-gray-800 focus:outline-none focus:bg-black"
+        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-32 mb-4 md:mr-4 md:mb-32 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none  focus:bg-gray-400 dark-focus:bg-black"
         :title="muted ? 'Click to unmute' : 'Click to mute'"
         @click="toggleSound"
       >
@@ -175,7 +175,7 @@
         </svg>
       </button>
       <button
-        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-4 mb-4 hover:bg-gray-800 focus:outline-none focus:bg-black"
+        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-4 mb-4 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none  focus:bg-gray-400 dark-focus:bg-black"
         title="Open settings"
         @click="toggleSettings"
       >
@@ -205,7 +205,9 @@
       leave-to-class="opacity-0"
     >
       <div v-if="settingsModalOpen" class="fixed inset-0 transition-opacity">
-        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        <div
+          class="absolute inset-0 bg-gray-700 dark:bg-gray-500 opacity-75"
+        ></div>
       </div>
     </transition>
 
@@ -222,7 +224,7 @@
         class="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
       >
         <div
-          class="bg-white rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
+          class="bg-gray-100 dark:bg-white rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
         >
           <div class="sm:flex sm:items-start">
             <div
@@ -290,6 +292,7 @@
                           ></label
                         >
                       </div>
+                      <theme-switcher />
                     </div>
                   </div>
                 </div>
@@ -372,6 +375,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
 import { Howl } from 'howler';
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
+
 const beepWav = require('@/static/sounds/beep.wav');
 const bongWav = require('@/static/sounds/bong.wav');
 const bongMp3 = require('@/static/sounds/bong.mp3');
@@ -388,7 +393,11 @@ interface countdown {
   breakLength: number;
 }
 
-@Component
+@Component({
+  components: {
+    ThemeSwitcher,
+  },
+})
 export default class Timer extends Vue {
   settingsModalOpen: boolean = false;
 

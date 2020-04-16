@@ -5,7 +5,16 @@
  ** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
  */
 module.exports = {
-  theme: {},
-  variants: {},
-  plugins: [require('@tailwindcss/custom-forms')],
+  theme: {
+    darkSelector: '.dark-mode',
+  },
+  variants: {
+    backgroundColor: ['dark', 'dark-hover', 'dark-focus', 'hover', 'focus'],
+    borderColor: ['dark'],
+    textColor: ['dark', 'dark-hover'],
+  },
+  plugins: [
+    require('@tailwindcss/custom-forms'),
+    require('tailwindcss-dark-mode')(),
+  ],
 };
