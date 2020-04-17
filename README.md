@@ -1,4 +1,4 @@
-# workout-timer
+# Workout Timer
 
 > An awesome timer for calisthenics.
 

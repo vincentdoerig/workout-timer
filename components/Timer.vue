@@ -309,7 +309,7 @@
                             class="form-checkbox text-teal-500"
                             @click="$emit('showTitle')"
                           /><span class="text-base leading-6 text-gray-800 ml-2"
-                            >Show Title</span
+                            >Show title</span
                           ></label
                         >
                       </div>
@@ -323,7 +323,7 @@
                   </h3>
                   <div class="my-2 text-gray-800">
                     <div class="leading-7">
-                      Start/stop:
+                      Start/pause:
                       <kbd
                         class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
                         >space</kbd
@@ -575,6 +575,7 @@ export default class Timer extends Vue {
     this.swState.time = 0;
     this.swState.state = 'paused';
     this.swState.timer = null;
+    document.title = 'Workout Timer';
   }
 
   startCD(): void {
