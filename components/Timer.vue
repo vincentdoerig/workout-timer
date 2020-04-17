@@ -575,7 +575,7 @@ export default class Timer extends Vue {
     this.swState.time = 0;
     this.swState.state = 'paused';
     this.swState.timer = null;
-    document.title = 'Workout Timer';
+    document.title = 'Gym Timer';
   }
 
   startCD(): void {

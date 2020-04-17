@@ -4,7 +4,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'Workout Timer',
+    title: 'Free Online Gym Timer',
     meta: [
       { charset: 'utf-8' },
       {
@@ -15,7 +15,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'A simple stopwatch with a customisable break timer. A perfect addition to your workout.',
+          'A simple online stopwatch with a customisable break timer, audio feedback, keyboard shortcuts and a light/dark mode. The key to your perfekt workout.',
       },
     ],
     link: [
@@ -83,6 +83,65 @@ export default {
    ** Nuxt.js modules
    */
   modules: ['@nuxtjs/pwa'],
+  /*
+   ** Nuxt.js PWA Workbox Moduoe
+   */
+  pwa: {
+    manifest: {
+      name: 'Gym Timer',
+      short_name: 'GymTimer',
+      description:
+        'A simple online stopwatch with a customisable break timer, audio feedback, keyboard shortcuts and a light/dark mode. The key to your perfekt workout.',
+      theme_color: '#4fd1c5',
+      background_color: '#1a202c',
+      display: 'fullscreen',
+      scope: '/',
+      lang: 'en',
+      icons: [
+        {
+          src: 'images/icons/icon-72x72.png',
+          sizes: '72x72',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-96x96.png',
+          sizes: '96x96',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-128x128.png',
+          sizes: '128x128',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-144x144.png',
+          sizes: '144x144',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-152x152.png',
+          sizes: '152x152',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-384x384.png',
+          sizes: '384x384',
+          type: 'image/png',
+        },
+        {
+          src: 'images/icons/icon-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+      ],
+    },
+    workbox: {},
+  },
   /*
    ** Build configuration
    */
