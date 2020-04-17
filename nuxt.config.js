@@ -56,6 +56,7 @@ export default {
         body: true,
       },
     ],
+    __dangerouslyDisableSanitizers: ['noscript'],
   },
   /*
    ** Customize the progress-bar color
