@@ -44,7 +44,7 @@ export default {
     ],
     script: [
       {
-        src: 'https://cdn.simpleanalytics.io/hello.js',
+        src: 'https://sa.gymtimer.io/app.js',
         async: true,
         defer: true,
         body: true,
@@ -52,8 +52,7 @@ export default {
     ],
     noscript: [
       {
-        innerHTML:
-          '<img src="https://api.simpleanalytics.io/hello.gif" alt="">',
+        innerHTML: '<img src="https://sa.gymtimer.io/image.gif" alt="">',
         body: true,
       },
     ],
