@@ -1,6 +1,6 @@
-# Workout Timer
+# Gym Timer
 
-> An awesome timer for calisthenics.
+> An awesome timer for your workout.
 
 ## Build Setup
 
