@@ -140,7 +140,9 @@ export default {
         },
       ],
     },
-    workbox: {},
+    workbox: {
+      offlineAssets: ['/sounds/beep.wav', '/sounds/bong.mp3'],
+    },
   },
   /*
    ** Build configuration
