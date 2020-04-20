@@ -340,7 +340,7 @@
                       >
                     </div>
                     <div class="leading-7">
-                      Start/stop break:
+                      Start/pause break:
                       <kbd
                         class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
                         >b</kbd
