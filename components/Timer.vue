@@ -31,41 +31,36 @@
           >
             <svg
               v-if="swState.state === 'running'"
-              stroke="currentColor"
-              viewBox="0 0 512 528"
               class="mr-3 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
-                fill="none"
-                stroke-miterlimit="10"
-                stroke-width="32"
-              />
-              <path
                 stroke-linecap="round"
-                stroke-miterlimit="10"
-                stroke-width="32"
-                d="M208 192v128M304 192v128"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
             <svg
               v-else
-              stroke="currentColor"
-              viewBox="0 0 512 528"
               class="mr-3 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
-                fill="none"
-                stroke="currentColor"
-                stroke-miterlimit="10"
-                stroke-width="32"
+                d="M14.7519 11.1679L11.5547 9.03647C10.8901 8.59343 10 9.06982 10 9.86852V14.1315C10 14.9302 10.8901 15.4066 11.5547 14.9635L14.7519 12.8321C15.3457 12.4362 15.3457 11.5638 14.7519 11.1679Z"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               />
               <path
-                d="M216.32 334.44l114.45-69.14a10.89 10.89 0
-              000-18.6l-114.45-69.14a10.78 10.78 0 00-16.32
-              9.31v138.26a10.78 10.78 0 0016.32 9.31z"
-                fill="currentColor"
+                d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               />
             </svg>
             <p>
