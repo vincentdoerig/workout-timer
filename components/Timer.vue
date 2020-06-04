@@ -1,9 +1,9 @@
 <template>
   <section>
-    <main class="flex flex-col justify-center items-center my-4">
+    <main class="flex flex-col items-center justify-center my-4">
       <div>
         <h2
-          class="sm:text-lg md:text-2xl lg:text-3xl text-teal-900 dark:text-teal-200 text-center small-caps"
+          class="text-center text-teal-900 sm:text-lg md:text-2xl lg:text-3xl dark:text-teal-200 small-caps"
         >
           Elapsed
         </h2>
@@ -13,7 +13,7 @@
       </div>
       <div>
         <h2
-          class="sm:text-md md:text-xl lg:text-2xl text-teal-900 dark:text-teal-200 text-center small-caps"
+          class="text-center text-teal-900 sm:text-md md:text-xl lg:text-2xl dark:text-teal-200 small-caps"
         >
           Rest
         </h2>
@@ -22,16 +22,16 @@
         </div>
       </div>
       <div
-        class="flex flex-row flex-wrap justify-evenly items-start w-full mt-4"
+        class="flex flex-row flex-wrap items-start w-full mt-4 justify-evenly"
       >
         <div class="flex flex-col items-start">
           <button
-            class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+            class="flex px-5 py-4 text-lg font-medium leading-6 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="startStop"
           >
             <svg
               v-if="swState.state === 'running'"
-              class="mr-3 h-6 w-6"
+              class="w-6 h-6 mr-3"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -45,7 +45,7 @@
             </svg>
             <svg
               v-else
-              class="mr-3 h-6 w-6"
+              class="w-6 h-6 mr-3"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -75,13 +75,13 @@
           </button>
           <button
             v-if="swState.state === 'paused' && swState.time > 0"
-            class="flex mr-4 rounded-md border border-teal-600 dark:border-teal-400 px-2 py-1 text-sm leading-8 text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+            class="flex px-2 py-1 mt-4 mr-4 text-sm leading-8 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetSW"
           >
             <svg
               fill="currentColor"
               viewBox="0 0 20 20"
-              class="mr-3 mt-2 h-4 w-4"
+              class="w-4 h-4 mt-2 mr-3"
             >
               <path
                 fill-rule="evenodd"
@@ -95,13 +95,13 @@
 
         <div class="flex flex-col items-start">
           <button
-            class="flex rounded-md border border-teal-600 dark:border-teal-400 px-5 py-4 text-lg leading-6 font-medium text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+            class="flex px-5 py-4 text-lg font-medium leading-6 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="startStopBreak"
           >
             <svg
               stroke="currentColor"
               viewBox="0 0 528 528"
-              class="mr-3 h-6 w-6"
+              class="w-6 h-6 mr-3"
             >
               <path
                 d="M145.61 464h220.78c19.8 0 35.55-16.29 33.42-35.06C386.06
@@ -135,12 +135,12 @@
           </button>
           <button
             v-if="cdState.state === 'paused' && cdState.timeLeft > 0"
-            class="flex mr-4 rounded-md border border-teal-600 dark:border-teal-400 px-2 py-1 text-sm leading-8 text-black dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 transition ease-in-out duration-150 mt-4 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+            class="flex px-2 py-1 mt-4 mr-4 text-sm leading-8 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetCD"
           >
             <svg
               viewBox="0 0 512 512"
-              class="mr-3 mt-2 h-4 w-4"
+              class="w-4 h-4 mt-2 mr-3"
               stroke="currentColor"
             >
               <path
@@ -165,7 +165,7 @@
     </main>
     <section>
       <button
-        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-32 mb-4 md:mr-4 md:mb-32 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none  focus:bg-gray-400 dark-focus:bg-black"
+        class="fixed bottom-0 right-0 px-4 py-3 mb-4 mr-32 border border-teal-400 rounded-lg md:mr-4 md:mb-32 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
         :title="muted ? 'Click to unmute' : 'Click to mute'"
         @click="toggleSound"
       >
@@ -191,7 +191,7 @@
         </svg>
       </button>
       <button
-        class="fixed bottom-0 right-0 border border-teal-400 px-4 py-3 rounded-lg mr-4 mb-4 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none  focus:bg-gray-400 dark-focus:bg-black"
+        class="fixed bottom-0 right-0 px-4 py-3 mb-4 mr-4 border border-teal-400 rounded-lg hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
         title="Open settings"
         @click="toggleSettings"
       >
@@ -213,38 +213,38 @@
       </button>
     </section>
     <transition
-      enter-active-class="ease-out duration-300"
+      enter-active-class="duration-300 ease-out"
       enter-class="opacity-0"
       enter-to-class="opacity-100"
-      leave-active-class="ease-in duration-200"
+      leave-active-class="duration-200 ease-in"
       leave-class="opacity-100"
       leave-to-class="opacity-0"
     >
       <div v-if="settingsModalOpen" class="fixed inset-0 transition-opacity">
         <div
-          class="absolute inset-0 bg-gray-700 dark:bg-gray-500 opacity-75"
+          class="absolute inset-0 bg-gray-700 opacity-75 dark:bg-gray-500"
         ></div>
       </div>
     </transition>
 
     <transition
-      enter-active-class="ease-out duration-300"
-      enter-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      enter-to-class="opacity-100 translate-y-0 sm:scale-100"
-      leave-active-class="ease-in duration-200"
-      leave-class="opacity-100 translate-y-0 sm:scale-100"
-      leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      enter-active-class="duration-300 ease-out"
+      enter-class="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
+      enter-to-class="translate-y-0 opacity-100 sm:scale-100"
+      leave-active-class="duration-200 ease-in"
+      leave-class="translate-y-0 opacity-100 sm:scale-100"
+      leave-to-class="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
     >
       <div
         v-if="settingsModalOpen"
-        class="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
+        class="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
       >
         <div
-          class="bg-gray-100 dark:bg-white rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
+          class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-gray-100 rounded-lg shadow-xl dark:bg-white sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
         >
           <div class="sm:flex sm:items-start">
             <div
-              class="hidden sm:flex mx-auto flex-shrink-0 items-center justify-center h-12 w-12 rounded-full bg-gray-200 sm:mx-0 sm:h-10 sm:w-10"
+              class="items-center justify-center flex-shrink-0 hidden w-12 h-12 mx-auto bg-gray-200 rounded-full sm:flex sm:mx-0 sm:h-10 sm:w-10"
             >
               <svg
                 fill="currentColor"
@@ -261,14 +261,14 @@
             <div class="mt-0 sm:ml-4 lg:ml-8">
               <div class="sm:flex sm:flex-row">
                 <div>
-                  <h3 class="text-xl leading-6 font-medium text-gray-900">
+                  <h3 class="text-xl font-medium leading-6 text-gray-900">
                     Settings
                   </h3>
                   <div class="mt-2">
                     <div>
                       <label
                         for="break"
-                        class="block text-sm leading-5 font-medium text-gray-800"
+                        class="block text-sm font-medium leading-5 text-gray-800"
                         >Break time</label
                       >
                       <div class="mt-1">
@@ -276,7 +276,7 @@
                           <input
                             id="break"
                             v-model.lazy="cdState.breakLength"
-                            class="appearance-none focus:shadow-outline sm:text-sm sm:leading-5 bg-gray-200 text-gray-900 w-32 pr-16 pl-2 py-1 rounded"
+                            class="w-32 py-1 pl-2 pr-16 text-gray-900 bg-gray-200 rounded appearance-none focus:shadow-outline sm:text-sm sm:leading-5"
                             :class="error ? 'border border-red-500' : ''"
                             placeholder="90"
                             pattern="[0-9]*"
@@ -284,14 +284,14 @@
                             @keyup.enter="toggleSettings"
                           />
                           <div
-                            class="absolute inset-y-0 ml-12 pl-6 flex items-center pointer-events-none"
+                            class="absolute inset-y-0 flex items-center pl-6 ml-12 pointer-events-none"
                           >
-                            <span class="text-gray-700 text-sm leading-5">
+                            <span class="text-sm leading-5 text-gray-700">
                               seconds
                             </span>
                           </div>
                         </div>
-                        <p v-if="error" class="text-red-500 text-xs italic">
+                        <p v-if="error" class="text-xs italic text-red-500">
                           Please choose a valid break time.
                         </p>
                       </div>
@@ -301,9 +301,9 @@
                             id="title"
                             type="checkbox"
                             name="title"
-                            class="form-checkbox text-teal-500"
+                            class="text-teal-500 form-checkbox"
                             @click="$emit('showTitle')"
-                          /><span class="text-base leading-6 text-gray-800 ml-2"
+                          /><span class="ml-2 text-base leading-6 text-gray-800"
                             >Show title</span
                           ></label
                         >
@@ -312,46 +312,46 @@
                     </div>
                   </div>
                 </div>
-                <div class="sm:ml-8 lg:ml-16 text-sm hidden sm:block">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                <div class="hidden text-sm sm:ml-8 lg:ml-16 sm:block">
+                  <h3 class="text-lg font-medium leading-6 text-gray-900">
                     Keyboard Shortcuts
                   </h3>
                   <div class="my-2 text-gray-800">
                     <div class="leading-7">
                       Start/pause:
                       <kbd
-                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
                         >space</kbd
                       >
                       or
                       <kbd
-                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
                         >enter</kbd
                       >
                       or
                       <kbd
-                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
                         >s</kbd
                       >
                     </div>
                     <div class="leading-7">
                       Start/pause break:
                       <kbd
-                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
                         >b</kbd
                       >
                     </div>
                     <div class="leading-7">
                       Reset timer:
                       <kbd
-                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
                         >r</kbd
                       >
                     </div>
                     <div class="leading-7">
                       Toggle sound:
                       <kbd
-                        class="text-xs shadow-sm bg-gray-400 rounded-sm py-1 px-2 font-mono"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
                         >m</kbd
                       >
                     </div>
@@ -364,18 +364,18 @@
             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
               <button
                 type="button"
-                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-teal-600 border border-transparent rounded-md shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline sm:text-sm sm:leading-5"
                 @click="toggleSettings"
               >
                 Save
               </button>
             </span>
             <span
-              class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+              class="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto"
             >
               <button
                 type="button"
-                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5"
                 @click="cancelSettings"
               >
                 Cancel
