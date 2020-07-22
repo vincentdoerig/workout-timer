@@ -275,7 +275,7 @@
                         <div class="relative">
                           <input
                             id="break"
-                            v-model.lazy="cdState.breakLength"
+                            v-model="cdState.breakLengthSetting"
                             class="w-32 py-1 pl-2 pr-16 text-gray-900 bg-gray-200 rounded appearance-none focus:shadow-outline sm:text-sm sm:leading-5"
                             :class="error ? 'border border-red-500' : ''"
                             placeholder="90"
@@ -407,6 +407,7 @@ interface countdown {
   timeLeft: number;
   state: string;
   breakLength: number;
+  breakLengthSetting: number;
 }
 
 @Component({
@@ -428,6 +429,7 @@ export default class Timer extends Vue {
     timeLeft: 0,
     state: 'paused',
     breakLength: 90,
+    breakLengthSetting: 90,
   };
 
   muted: boolean = true;
@@ -469,8 +471,11 @@ export default class Timer extends Vue {
 
   mounted(): void {
     if (localStorage.muted) this.muted = localStorage.muted === 'true';
-    if (localStorage.breakLength)
-      this.cdState.breakLength = parseInt(localStorage.breakLength);
+    if (localStorage.breakLength) {
+      const breakLengh: number = parseInt(localStorage.breakLength);
+      this.cdState.breakLength = breakLengh;
+      this.cdState.breakLengthSetting = breakLengh;
+    }
     window.addEventListener('keydown', this.handleShortcut);
   }
 
@@ -492,9 +497,9 @@ export default class Timer extends Vue {
 
   toggleSettings(): void {
     if (
-      isNaN(this.cdState.breakLength) ||
-      this.cdState.breakLength < 1 ||
-      this.cdState.breakLength > 3600
+      isNaN(this.cdState.breakLengthSetting) ||
+      this.cdState.breakLengthSetting < 1 ||
+      this.cdState.breakLengthSetting > 3600
     ) {
       // return an error if the input isn't a number, and not bigger than 3600 (1 hour --> max countdown value)
       this.error = true;
@@ -502,13 +507,19 @@ export default class Timer extends Vue {
     }
     this.error = false;
     this.settingsModalOpen = !this.settingsModalOpen;
-    if (!this.settingsModalOpen)
+    if (!this.settingsModalOpen) {
       // only save when settings are closed
-      localStorage.setItem('breakLength', this.cdState.breakLength.toString());
+      localStorage.setItem(
+        'breakLength',
+        this.cdState.breakLengthSetting.toString(),
+      );
+      // set the setting to the actual break length value
+      this.cdState.breakLength = this.cdState.breakLengthSetting;
+    }
   }
 
   cancelSettings(): void {
-    this.cdState.breakLength = parseInt(localStorage.breakLength) || 90;
+    this.cdState.breakLengthSetting = this.cdState.breakLength;
     this.settingsModalOpen = !this.settingsModalOpen;
   }
 
