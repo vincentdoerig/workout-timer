@@ -2,6 +2,12 @@
 
 > An awesome timer for your workout.
 
+## Tech Stack 🥞
+
+- Nuxt.js with TypeScript
+- TailwindCSS
+- howler.js (audio library)
+
 ## Build Setup
 
 ```bash
