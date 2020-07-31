@@ -415,15 +415,18 @@ interface countdown {
     ThemeSwitcher,
   },
 })
+
 export default class Timer extends Vue {
   settingsModalOpen: boolean = false;
 
+  // stopwatch state
   swState: stopWatch = {
     timer: null,
     time: 0,
     state: 'paused',
   };
 
+  // countdown state
   cdState: countdown = {
     timer: null,
     timeLeft: 0,
