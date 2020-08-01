@@ -1,4 +1,5 @@
 import { State } from '@/types/timer';
+import { ActionContext } from 'vuex';
 
 export const state = (): State => ({
   stopWatch: {
@@ -46,5 +47,51 @@ export const mutations = {
   setBreakLength(state: State, breakLength: number) {
     state.countDown.breakLength = breakLength;
     state.countDown.breakLengthSetting = breakLength;
+  },
+  startSW(state: State): void {
+    state.stopWatch.state = 'running';
+    state.stopWatch.timer = setInterval(() => {
+      state.stopWatch.time += 1;
+      // document.title = this.formattedElapsedTime;
+    }, 1000);
+  },
+};
+
+export const actions = {
+  startStop({ commit, state }: ActionContext<State, any>): void {
+    // initial state --> start timer
+    commit('startSW');
+    if (!state.stopWatch.timer || state.stopWatch.state === 'paused') {
+      commit('startSW');
+      if (state.countDown.timeLeft > 0) commit('startCDRecursion');
+    } else {
+      // stop (pause) all timers
+      commit('stopSW');
+      if (state.countDown.timer) commit('stopCD');
+    }
+  },
+  startStopBreak({ commit, getters, state }: ActionContext<State, any>): void {
+    /* if (state.countDown.timeLeft > 0) {
+      // break timer already running
+      if (getters.bothPaused) {
+        // both timers paused => continue stopwatch and countdown
+         state.startSW();
+           state.startCDRecursion();
+
+        // commit('startSW')
+      } else if (state.countDown.state === 'running') {
+        state.stopCD();
+      } else {
+        state.startCDRecursion();
+      }
+    } else if (getters.bothPaused) {
+      state.startSW();
+      state.startCD();
+    } else if (getters.bothRunning) {
+      state.stopCD();
+    } else {
+      state.startCD();
+    }
+    */
   },
 };

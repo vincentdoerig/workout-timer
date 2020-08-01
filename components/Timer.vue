@@ -390,9 +390,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
-import { mapGetters, mapState, mapMutations } from 'vuex';
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 import { Howl } from 'howler';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
+import { StopWatch, CountDown } from '../types/timer';
 // import { CountDown } from '@/store/timer';
 
 const beepWav = require('@/static/sounds/beep.wav');
@@ -405,6 +406,7 @@ const bongMp3 = require('@/static/sounds/bong.mp3');
   },
   methods: {
     ...mapMutations('timer', ['setBreakLength']),
+    ...mapActions('timer', ['startStopBreak', 'startStop']),
   },
   computed: {
     ...mapGetters('timer', [
@@ -422,6 +424,12 @@ export default class Timer extends Vue {
   muted: boolean = true;
 
   error: boolean = false;
+
+  stopWatch!: StopWatch;
+  countDown!: CountDown;
+  setBreakLength!: (numbreakLength: number) => void;
+  startStop!: () => void;
+  startStopBreak!: () => void;
 
   @Watch('countDown.state')
   isOnBreak() {
@@ -484,48 +492,6 @@ export default class Timer extends Vue {
   toggleSound(): void {
     this.muted = !this.muted;
     localStorage.setItem('muted', this.muted.toString());
-  }
-
-  startStop(): void {
-    // initial state --> start timer
-    if (!this.stopWatch.timer || this.stopWatch.state === 'paused') {
-      this.startSW();
-      if (this.countDown.timeLeft > 0) this.startCDRecursion();
-    } else {
-      // stop (pause) all timers
-      this.stopSW();
-      if (this.countDown.timer) this.stopCD();
-    }
-  }
-
-  startStopBreak(): void {
-    if (this.countDown.timeLeft > 0) {
-      // break timer already running
-      if (this.bothPaused) {
-        // both timers paused => continue stopwatch and countdown
-        this.startSW();
-        this.startCDRecursion();
-      } else if (this.countDown.state === 'running') {
-        this.stopCD();
-      } else {
-        this.startCDRecursion();
-      }
-    } else if (this.bothPaused) {
-      this.startSW();
-      this.startCD();
-    } else if (this.bothRunning) {
-      this.stopCD();
-    } else {
-      this.startCD();
-    }
-  }
-
-  startSW(): void {
-    this.stopWatch.state = 'running';
-    this.stopWatch.timer = setInterval(() => {
-      this.stopWatch.time += 1;
-      document.title = this.formattedElapsedTime;
-    }, 1000);
   }
 
   stopSW(): void {
