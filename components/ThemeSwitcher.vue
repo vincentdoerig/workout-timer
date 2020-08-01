@@ -14,13 +14,13 @@
       <label
         for="dark-mode"
         tabindex="0"
-        class="hover:shadow-md cursor-pointer focus:shadow-md rounded focus:shadow-outline"
+        class="rounded cursor-pointer hover:shadow-md focus:shadow-md focus:shadow-outline"
         @keydown.enter="$colorMode.preference = 'dark'"
         @keydown.space="$colorMode.preference = 'dark'"
       >
         <p class="sr-only">Dark mode</p>
         <div
-          class="w-8 h-8 bg-gray-800 rounded border-2"
+          class="w-8 h-8 bg-gray-800 border-2 rounded"
           :class="$colorMode.value === 'dark' ? 'border-teal-700 border-3' : ''"
         ></div>
       </label>
@@ -34,13 +34,13 @@
       <label
         for="light-mode"
         tabindex="0"
-        class="ml-3 hover:shadow-md cursor-pointer focus:shadow-md rounded focus:shadow-outline"
+        class="ml-3 rounded cursor-pointer hover:shadow-md focus:shadow-md focus:shadow-outline"
         @keydown.enter="$colorMode.preference = 'light'"
         @keydown.space="$colorMode.preference = 'light'"
       >
         <p class="sr-only">Light mode</p>
         <div
-          class="w-8 h-8 bg-gray-200 rounded border-2"
+          class="w-8 h-8 bg-gray-200 border-2 rounded"
           :class="
             $colorMode.value === 'light' ? 'border-teal-700 border-3' : ''
           "
@@ -49,3 +49,9 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'ThemeSwitcher',
+};
+</script>
