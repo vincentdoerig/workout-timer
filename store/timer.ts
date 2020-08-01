@@ -64,4 +64,13 @@ export const mutations = {
   clearSWInterval(state: State) {
     clearInterval(state.stopWatch.timer);
   },
+  decreaseCDInterval(state: State) {
+    state.countDown.timeLeft -= 1;
+  },
+  setCDInterval(state: State, interval: number) {
+    state.countDown.timer = interval;
+  },
+  clearCDInterval(state: State) {
+    clearInterval(state.countDown.timer);
+  },
 };

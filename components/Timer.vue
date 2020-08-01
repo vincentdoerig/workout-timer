@@ -411,6 +411,9 @@ const bongMp3 = require('@/static/sounds/bong.mp3');
       'increaseSWInterval',
       'setSWInterval',
       'clearSWInterval',
+      'decreaseCDInterval',
+      'setCDInterval',
+      'clearCDInterval',
     ]),
     // ...mapActions('timer', []),
   },
@@ -446,6 +449,9 @@ export default class Timer extends Vue {
   increaseSWInterval!: () => void;
   setSWInterval!: (interval: number) => void;
   clearSWInterval!: () => void;
+  decreaseCDInterval!: () => void;
+  setCDInterval!: (interval: number) => void;
+  clearCDInterval!: () => void;
 
   @Watch('countDown.state')
   isOnBreak() {
@@ -570,12 +576,12 @@ export default class Timer extends Vue {
   }
 
   startCD(): void {
-    this.countDown.timeLeft = this.countDown.breakLength;
+    this.setCD({ property: 'timeLeft', value: this.countDown.breakLength });
     this.startCDRecursion();
   }
 
   startCDRecursion(): void {
-    this.countDown.state = 'running';
+    this.setCD({ property: 'state', value: 'running' });
     const endSound = new Howl({
       src: [bongMp3, bongWav],
       // volume: 0.5,
@@ -586,8 +592,8 @@ export default class Timer extends Vue {
       // volume: 0.5,
       autoplay: false,
     });
-    this.countDown.timer = setInterval(() => {
-      this.countDown.timeLeft -= 1;
+    const interval = setInterval(() => {
+      this.decreaseCDInterval();
       if (
         !this.muted &&
         this.countDown.timeLeft <= 5 &&
@@ -601,16 +607,17 @@ export default class Timer extends Vue {
         if (!this.muted) endSound.play();
       }
     }, 1000);
+    this.setCD({ property: 'timer', value: interval });
   }
 
   stopCD(): void {
-    this.countDown.state = 'paused';
-    clearTimeout(this.countDown.timer);
+    this.setCD({ property: 'state', value: 'paused' });
+    this.clearCDInterval();
   }
 
   resetCD(): void {
-    this.countDown.timeLeft = 0;
-    this.countDown.state = 'paused';
+    this.setCD({ property: 'timeLeft', value: 0 });
+    this.setCD({ property: 'state', value: 'paused' });
   }
 }
 </script>
