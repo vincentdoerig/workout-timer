@@ -12,7 +12,6 @@ export const state = (): State => ({
     timeLeft: 0,
     state: 'paused',
     breakLength: 90,
-    breakLengthSetting: 90,
   },
 });
 
@@ -45,8 +44,7 @@ export const getters = {
 
 export const mutations = {
   setBreakLength(state: State, breakLength: number) {
-    state.countDown.breakLength = breakLength;
-    state.countDown.breakLengthSetting = breakLength;
+    state.countDown.breakLength = parseInt(breakLength);
   },
   startSW(state: State): void {
     state.stopWatch.state = 'running';
@@ -71,27 +69,24 @@ export const actions = {
     }
   },
   startStopBreak({ commit, getters, state }: ActionContext<State, any>): void {
-    /* if (state.countDown.timeLeft > 0) {
+    if (state.countDown.timeLeft > 0) {
       // break timer already running
       if (getters.bothPaused) {
         // both timers paused => continue stopwatch and countdown
-         state.startSW();
-           state.startCDRecursion();
-
-        // commit('startSW')
+        commit('startSW');
+        commit('startCDRecursion');
       } else if (state.countDown.state === 'running') {
-        state.stopCD();
+        commit('stopCD');
       } else {
-        state.startCDRecursion();
+        commit('startCDRecursion');
       }
     } else if (getters.bothPaused) {
-      state.startSW();
-      state.startCD();
+      commit('startSW');
+      commit('startCD');
     } else if (getters.bothRunning) {
-      state.stopCD();
+      commit('stopCD');
     } else {
-      state.startCD();
+      commit('startCD');
     }
-    */
   },
 };

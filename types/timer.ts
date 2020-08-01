@@ -8,7 +8,6 @@ export interface CountDown {
   timeLeft: number;
   state: string;
   breakLength: number;
-  breakLengthSetting: number;
 }
 export interface State {
   stopWatch: StopWatch;

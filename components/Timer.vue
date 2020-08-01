@@ -275,7 +275,7 @@
                         <div class="relative">
                           <input
                             id="break"
-                            v-model="countDown.breakLengthSetting"
+                            v-model="breakLengthSetting"
                             class="w-32 py-1 pl-2 pr-16 text-gray-900 bg-gray-200 rounded appearance-none focus:shadow-outline sm:text-sm sm:leading-5"
                             :class="error ? 'border border-red-500' : ''"
                             placeholder="90"
@@ -420,6 +420,7 @@ const bongMp3 = require('@/static/sounds/bong.mp3');
 })
 export default class Timer extends Vue {
   settingsModalOpen: boolean = false;
+  breakLengthSetting: number = 90;
 
   muted: boolean = true;
 
@@ -440,6 +441,7 @@ export default class Timer extends Vue {
     if (localStorage.muted) this.muted = localStorage.muted === 'true';
     if (localStorage.breakLength) {
       const breakLength: number = parseInt(localStorage.breakLength);
+      this.breakLengthSetting = breakLength;
       this.setBreakLength(breakLength);
     }
     window.addEventListener('keydown', this.handleShortcut);
@@ -463,9 +465,9 @@ export default class Timer extends Vue {
 
   toggleSettings(): void {
     if (
-      isNaN(this.countDown.breakLengthSetting) ||
-      this.countDown.breakLengthSetting < 1 ||
-      this.countDown.breakLengthSetting > 3600
+      isNaN(this.breakLengthSetting) ||
+      this.breakLengthSetting < 1 ||
+      this.breakLengthSetting > 3600
     ) {
       // return an error if the input isn't a number, and not bigger than 3600 (1 hour --> max countdown value)
       this.error = true;
@@ -475,17 +477,14 @@ export default class Timer extends Vue {
     this.settingsModalOpen = !this.settingsModalOpen;
     if (!this.settingsModalOpen) {
       // only save when settings are closed
-      localStorage.setItem(
-        'breakLength',
-        this.countDown.breakLengthSetting.toString(),
-      );
+      localStorage.setItem('breakLength', this.breakLengthSetting.toString());
       // set the setting to the actual break length value
-      this.countDown.breakLength = this.countDown.breakLengthSetting;
+      this.setBreakLength(Number(this.breakLengthSetting));
     }
   }
 
   cancelSettings(): void {
-    this.countDown.breakLengthSetting = this.countDown.breakLength;
+    this.breakLengthSetting = this.countDown.breakLength;
     this.settingsModalOpen = !this.settingsModalOpen;
   }
 
