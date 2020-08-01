@@ -394,7 +394,6 @@ import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 import { Howl } from 'howler';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 import { StopWatch, CountDown } from '../types/timer';
-// import { CountDown } from '@/store/timer';
 
 const beepWav = require('@/static/sounds/beep.wav');
 const bongWav = require('@/static/sounds/bong.wav');
@@ -405,8 +404,15 @@ const bongMp3 = require('@/static/sounds/bong.mp3');
     ThemeSwitcher,
   },
   methods: {
-    ...mapMutations('timer', ['setBreakLength']),
-    ...mapActions('timer', ['startStopBreak', 'startStop']),
+    ...mapMutations('timer', [
+      'setBreakLength',
+      'setSW',
+      'setCD',
+      'increaseSWInterval',
+      'setSWInterval',
+      'clearSWInterval',
+    ]),
+    // ...mapActions('timer', []),
   },
   computed: {
     ...mapGetters('timer', [
@@ -426,11 +432,20 @@ export default class Timer extends Vue {
 
   error: boolean = false;
 
+  // State
   stopWatch!: StopWatch;
   countDown!: CountDown;
+  // Getters
+  formattedElapsedTime!: string;
+  bothPaused!: boolean;
+  bothRunning!: boolean;
+  // Mutations
   setBreakLength!: (numbreakLength: number) => void;
-  startStop!: () => void;
-  startStopBreak!: () => void;
+  setSW!: (payload: { property: string; value: any }) => void;
+  setCD!: (payload: { property: string; value: any }) => void;
+  increaseSWInterval!: () => void;
+  setSWInterval!: (interval: number) => void;
+  clearSWInterval!: () => void;
 
   @Watch('countDown.state')
   isOnBreak() {
@@ -449,6 +464,67 @@ export default class Timer extends Vue {
 
   destroyed(): void {
     window.removeEventListener('keydown', this.handleShortcut);
+  }
+
+  startStop(): void {
+    // initial state --> start timer
+    if (!this.stopWatch.timer || this.stopWatch.state === 'paused') {
+      this.startSW();
+      if (this.countDown.timeLeft > 0) this.startCDRecursion();
+    } else {
+      // stop (pause) all timers
+      this.stopSW();
+      if (this.countDown.timer) this.stopCD();
+    }
+  }
+
+  startSW(): void {
+    this.setSW({ property: 'state', value: 'running' });
+    this.startCountingUp();
+  }
+
+  stopSW(): void {
+    this.setSW({ property: 'state', value: 'paused' });
+    this.clearSWInterval();
+    document.title = `${document.title} (stopped)`;
+  }
+
+  resetSW(): void {
+    if (this.stopWatch.state === 'running') this.startStop();
+    this.setSW({ property: 'time', value: 0 });
+    this.setSW({ property: 'state', value: 'paused' });
+    this.setSW({ property: 'timer', value: null });
+    document.title = 'Gym Timer';
+  }
+
+  startCountingUp(): void {
+    const interval = window.setInterval(() => {
+      this.increaseSWInterval();
+      document.title = this.formattedElapsedTime;
+    }, 1000);
+    this.setSW({ property: 'timer', value: interval });
+  }
+
+  startStopBreak(): void {
+    if (this.countDown.timeLeft > 0) {
+      // break timer already running
+      if (this.bothPaused) {
+        // both timers paused => continue stopwatch and countdown
+        this.startSW();
+        this.startCDRecursion();
+      } else if (this.countDown.state === 'running') {
+        this.stopCD();
+      } else {
+        this.startCDRecursion();
+      }
+    } else if (this.bothPaused) {
+      this.startSW();
+      this.startCD();
+    } else if (this.bothRunning) {
+      this.stopCD();
+    } else {
+      this.startCD();
+    }
   }
 
   handleShortcut(e: KeyboardEvent): void {
@@ -491,20 +567,6 @@ export default class Timer extends Vue {
   toggleSound(): void {
     this.muted = !this.muted;
     localStorage.setItem('muted', this.muted.toString());
-  }
-
-  stopSW(): void {
-    this.stopWatch.state = 'paused';
-    clearInterval(this.stopWatch.timer);
-    document.title = `${document.title} (stopped)`;
-  }
-
-  resetSW(): void {
-    if (this.stopWatch.state === 'running') this.startStop();
-    this.stopWatch.time = 0;
-    this.stopWatch.state = 'paused';
-    this.stopWatch.timer = null;
-    document.title = 'Gym Timer';
   }
 
   startCD(): void {

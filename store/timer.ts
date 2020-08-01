@@ -48,45 +48,20 @@ export const mutations = {
   },
   startSW(state: State): void {
     state.stopWatch.state = 'running';
-    state.stopWatch.timer = setInterval(() => {
-      state.stopWatch.time += 1;
-      // document.title = this.formattedElapsedTime;
-    }, 1000);
   },
-};
-
-export const actions = {
-  startStop({ commit, state }: ActionContext<State, any>): void {
-    // initial state --> start timer
-    commit('startSW');
-    if (!state.stopWatch.timer || state.stopWatch.state === 'paused') {
-      commit('startSW');
-      if (state.countDown.timeLeft > 0) commit('startCDRecursion');
-    } else {
-      // stop (pause) all timers
-      commit('stopSW');
-      if (state.countDown.timer) commit('stopCD');
-    }
+  setSW(state: State, payload: { property: string; value: any }) {
+    state.stopWatch[payload.property] = payload.value;
   },
-  startStopBreak({ commit, getters, state }: ActionContext<State, any>): void {
-    if (state.countDown.timeLeft > 0) {
-      // break timer already running
-      if (getters.bothPaused) {
-        // both timers paused => continue stopwatch and countdown
-        commit('startSW');
-        commit('startCDRecursion');
-      } else if (state.countDown.state === 'running') {
-        commit('stopCD');
-      } else {
-        commit('startCDRecursion');
-      }
-    } else if (getters.bothPaused) {
-      commit('startSW');
-      commit('startCD');
-    } else if (getters.bothRunning) {
-      commit('stopCD');
-    } else {
-      commit('startCD');
-    }
+  setCD(state: State, payload: { property: string; value: any }) {
+    state.countDown[payload.property] = payload.value;
+  },
+  increaseSWInterval(state: State) {
+    state.stopWatch.time += 1;
+  },
+  setSWInterval(state: State, interval: number) {
+    state.stopWatch.timer = interval;
+  },
+  clearSWInterval(state: State) {
+    clearInterval(state.stopWatch.timer);
   },
 };
