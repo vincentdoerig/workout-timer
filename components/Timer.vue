@@ -30,7 +30,7 @@
             @click="startStop"
           >
             <svg
-              v-if="swState.state === 'running'"
+              v-if="stopWatch.state === 'running'"
               class="w-6 h-6 mr-3"
               fill="none"
               viewBox="0 0 24 24"
@@ -65,8 +65,8 @@
             </svg>
             <p>
               {{
-                swState.state === 'paused'
-                  ? !swState.time
+                stopWatch.state === 'paused'
+                  ? !stopWatch.time
                     ? 'Start'
                     : 'Resume'
                   : 'Pause'
@@ -74,7 +74,7 @@
             </p>
           </button>
           <button
-            v-if="swState.state === 'paused' && swState.time > 0"
+            v-if="stopWatch.state === 'paused' && stopWatch.time > 0"
             class="flex px-2 py-1 mt-4 mr-4 text-sm leading-8 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetSW"
           >
@@ -122,19 +122,19 @@
               272 224v102c0 30.53 55.71 47 80.4 76.87 9.95 12.04 6.47 29.13-9.1 29.13z"
               />
             </svg>
-            <p v-if="cdState.state === 'running'">
+            <p v-if="countDown.state === 'running'">
               Pause Break
             </p>
             <p v-else>
-              <span v-if="cdState.timeLeft > 0">Resume Break</span>
+              <span v-if="countDown.timeLeft > 0">Resume Break</span>
               <span v-else
                 >Start Break
-                <span class="text-sm">({{ cdState.breakLength }}s)</span>
+                <span class="text-sm">({{ countDown.breakLength }}s)</span>
               </span>
             </p>
           </button>
           <button
-            v-if="cdState.state === 'paused' && cdState.timeLeft > 0"
+            v-if="countDown.state === 'paused' && countDown.timeLeft > 0"
             class="flex px-2 py-1 mt-4 mr-4 text-sm leading-8 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetCD"
           >
@@ -275,7 +275,7 @@
                         <div class="relative">
                           <input
                             id="break"
-                            v-model="cdState.breakLengthSetting"
+                            v-model="countDown.breakLengthSetting"
                             class="w-32 py-1 pl-2 pr-16 text-gray-900 bg-gray-200 rounded appearance-none focus:shadow-outline sm:text-sm sm:leading-5"
                             :class="error ? 'border border-red-500' : ''"
                             placeholder="90"
@@ -390,84 +390,40 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import { Howl } from 'howler';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
+// import { CountDown } from '@/store/timer';
 
 const beepWav = require('@/static/sounds/beep.wav');
 const bongWav = require('@/static/sounds/bong.wav');
 const bongMp3 = require('@/static/sounds/bong.mp3');
 
-interface stopWatch {
-  timer: any;
-  time: number;
-  state: string;
-}
-interface countdown {
-  timer: any;
-  timeLeft: number;
-  state: string;
-  breakLength: number;
-  breakLengthSetting: number;
-}
-
 @Component({
   components: {
     ThemeSwitcher,
   },
+  methods: {
+    ...mapMutations('timer', ['setBreakLength']),
+  },
+  computed: {
+    ...mapGetters('timer', [
+      'formattedElapsedTime',
+      'formattedBreakTime',
+      'bothRunning',
+      'bothPaused',
+    ]),
+    ...mapState('timer', ['stopWatch', 'countDown']),
+  },
 })
-
 export default class Timer extends Vue {
   settingsModalOpen: boolean = false;
-
-  // stopwatch state
-  swState: stopWatch = {
-    timer: null,
-    time: 0,
-    state: 'paused',
-  };
-
-  // countdown state
-  cdState: countdown = {
-    timer: null,
-    timeLeft: 0,
-    state: 'paused',
-    breakLength: 90,
-    breakLengthSetting: 90,
-  };
 
   muted: boolean = true;
 
   error: boolean = false;
 
-  get formattedElapsedTime(): string {
-    const date: Date = new Date(0);
-    date.setSeconds(this.swState.time);
-    const utc: string = date.toUTCString();
-    return utc.substring(utc.indexOf(':') - 2, 25);
-  }
-
-  get formattedBreakTime(): string {
-    const date: Date = new Date(0);
-    date.setSeconds(this.cdState.timeLeft);
-    const utc: string = date.toUTCString();
-    return utc.substring(utc.indexOf(':') + 1, 25);
-  }
-
-  get bothRunning(): boolean {
-    // eslint-disable-next-line prettier/prettier
-    if (this.swState.state === 'running' && this.cdState.state === 'running')
-      return true;
-    return false;
-  }
-
-  get bothPaused(): boolean {
-    // eslint-disable-next-line prettier/prettier
-    if (this.swState.state === 'paused' && this.cdState.state === 'paused')
-      return true;
-    return false;
-  }
-
-  @Watch('cdState.state')
+  @Watch('countDown.state')
   isOnBreak() {
     this.$emit('break');
   }
@@ -475,9 +431,8 @@ export default class Timer extends Vue {
   mounted(): void {
     if (localStorage.muted) this.muted = localStorage.muted === 'true';
     if (localStorage.breakLength) {
-      const breakLengh: number = parseInt(localStorage.breakLength);
-      this.cdState.breakLength = breakLengh;
-      this.cdState.breakLengthSetting = breakLengh;
+      const breakLength: number = parseInt(localStorage.breakLength);
+      this.setBreakLength(breakLength);
     }
     window.addEventListener('keydown', this.handleShortcut);
   }
@@ -500,9 +455,9 @@ export default class Timer extends Vue {
 
   toggleSettings(): void {
     if (
-      isNaN(this.cdState.breakLengthSetting) ||
-      this.cdState.breakLengthSetting < 1 ||
-      this.cdState.breakLengthSetting > 3600
+      isNaN(this.countDown.breakLengthSetting) ||
+      this.countDown.breakLengthSetting < 1 ||
+      this.countDown.breakLengthSetting > 3600
     ) {
       // return an error if the input isn't a number, and not bigger than 3600 (1 hour --> max countdown value)
       this.error = true;
@@ -514,15 +469,15 @@ export default class Timer extends Vue {
       // only save when settings are closed
       localStorage.setItem(
         'breakLength',
-        this.cdState.breakLengthSetting.toString(),
+        this.countDown.breakLengthSetting.toString(),
       );
       // set the setting to the actual break length value
-      this.cdState.breakLength = this.cdState.breakLengthSetting;
+      this.countDown.breakLength = this.countDown.breakLengthSetting;
     }
   }
 
   cancelSettings(): void {
-    this.cdState.breakLengthSetting = this.cdState.breakLength;
+    this.countDown.breakLengthSetting = this.countDown.breakLength;
     this.settingsModalOpen = !this.settingsModalOpen;
   }
 
@@ -533,24 +488,24 @@ export default class Timer extends Vue {
 
   startStop(): void {
     // initial state --> start timer
-    if (!this.swState.timer || this.swState.state === 'paused') {
+    if (!this.stopWatch.timer || this.stopWatch.state === 'paused') {
       this.startSW();
-      if (this.cdState.timeLeft > 0) this.startCDRecursion();
+      if (this.countDown.timeLeft > 0) this.startCDRecursion();
     } else {
       // stop (pause) all timers
       this.stopSW();
-      if (this.cdState.timer) this.stopCD();
+      if (this.countDown.timer) this.stopCD();
     }
   }
 
   startStopBreak(): void {
-    if (this.cdState.timeLeft > 0) {
+    if (this.countDown.timeLeft > 0) {
       // break timer already running
       if (this.bothPaused) {
         // both timers paused => continue stopwatch and countdown
         this.startSW();
         this.startCDRecursion();
-      } else if (this.cdState.state === 'running') {
+      } else if (this.countDown.state === 'running') {
         this.stopCD();
       } else {
         this.startCDRecursion();
@@ -566,34 +521,34 @@ export default class Timer extends Vue {
   }
 
   startSW(): void {
-    this.swState.state = 'running';
-    this.swState.timer = setInterval(() => {
-      this.swState.time += 1;
+    this.stopWatch.state = 'running';
+    this.stopWatch.timer = setInterval(() => {
+      this.stopWatch.time += 1;
       document.title = this.formattedElapsedTime;
     }, 1000);
   }
 
   stopSW(): void {
-    this.swState.state = 'paused';
-    clearInterval(this.swState.timer);
+    this.stopWatch.state = 'paused';
+    clearInterval(this.stopWatch.timer);
     document.title = `${document.title} (stopped)`;
   }
 
   resetSW(): void {
-    if (this.swState.state === 'running') this.startStop();
-    this.swState.time = 0;
-    this.swState.state = 'paused';
-    this.swState.timer = null;
+    if (this.stopWatch.state === 'running') this.startStop();
+    this.stopWatch.time = 0;
+    this.stopWatch.state = 'paused';
+    this.stopWatch.timer = null;
     document.title = 'Gym Timer';
   }
 
   startCD(): void {
-    this.cdState.timeLeft = this.cdState.breakLength;
+    this.countDown.timeLeft = this.countDown.breakLength;
     this.startCDRecursion();
   }
 
   startCDRecursion(): void {
-    this.cdState.state = 'running';
+    this.countDown.state = 'running';
     const endSound = new Howl({
       src: [bongMp3, bongWav],
       // volume: 0.5,
@@ -604,16 +559,16 @@ export default class Timer extends Vue {
       // volume: 0.5,
       autoplay: false,
     });
-    this.cdState.timer = setInterval(() => {
-      this.cdState.timeLeft -= 1;
+    this.countDown.timer = setInterval(() => {
+      this.countDown.timeLeft -= 1;
       if (
         !this.muted &&
-        this.cdState.timeLeft <= 5 &&
-        this.cdState.timeLeft > 0
+        this.countDown.timeLeft <= 5 &&
+        this.countDown.timeLeft > 0
       )
         beep.play();
 
-      if (this.cdState.timeLeft <= 0) {
+      if (this.countDown.timeLeft <= 0) {
         // countdown finished
         this.stopCD();
         if (!this.muted) endSound.play();
@@ -622,13 +577,13 @@ export default class Timer extends Vue {
   }
 
   stopCD(): void {
-    this.cdState.state = 'paused';
-    clearTimeout(this.cdState.timer);
+    this.countDown.state = 'paused';
+    clearTimeout(this.countDown.timer);
   }
 
   resetCD(): void {
-    this.cdState.timeLeft = 0;
-    this.cdState.state = 'paused';
+    this.countDown.timeLeft = 0;
+    this.countDown.state = 'paused';
   }
 }
 </script>
