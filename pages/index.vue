@@ -12,14 +12,14 @@
         An awesome timer for calisthenics.
       </h2> -->
       </div>
-      <timer @showTitle="toggleTitle" />
+      <timer />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import Timer from '@/components/Timer.vue';
 @Component({
   components: {
@@ -27,19 +27,9 @@ import Timer from '@/components/Timer.vue';
   },
   computed: {
     ...mapGetters('timer', ['bothRunning']),
+    ...mapState('settings', ['showTitle']),
   },
 })
 export default class Home extends Vue {
-  showTitle: boolean = true;
-
-  mounted(): void {
-    if (localStorage.showTitle)
-      this.showTitle = localStorage.showTitle === 'true';
-  }
-
-  toggleTitle(): void {
-    this.showTitle = !this.showTitle;
-    localStorage.setItem('showTitle', this.showTitle.toString());
-  }
 }
 </script>
