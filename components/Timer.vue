@@ -389,7 +389,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'nuxt-property-decorator';
+import { Component, Vue } from 'nuxt-property-decorator';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 import { Howl } from 'howler';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
@@ -452,11 +452,6 @@ export default class Timer extends Vue {
   decreaseCDInterval!: () => void;
   setCDInterval!: (interval: number) => void;
   clearCDInterval!: () => void;
-
-  @Watch('countDown.state')
-  isOnBreak() {
-    this.$emit('break');
-  }
 
   mounted(): void {
     if (localStorage.muted) this.muted = localStorage.muted === 'true';
