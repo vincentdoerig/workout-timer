@@ -390,7 +390,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator';
-import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import { Howl } from 'howler';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 import { StopWatch, CountDown } from '../types/timer';

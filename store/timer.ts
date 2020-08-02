@@ -1,5 +1,9 @@
-import { State } from '@/types/timer';
-import { ActionContext } from 'vuex';
+import { State } from '../types/timer';
+
+interface Payload {
+  property: string;
+  value: any;
+}
 
 export const state = (): State => ({
   stopWatch: {
@@ -44,15 +48,17 @@ export const getters = {
 
 export const mutations = {
   setBreakLength(state: State, breakLength: number) {
-    state.countDown.breakLength = parseInt(breakLength);
+    state.countDown.breakLength = Math.floor(breakLength);
   },
   startSW(state: State): void {
     state.stopWatch.state = 'running';
   },
-  setSW(state: State, payload: { property: string; value: any }) {
+  setSW(state: State, payload: Payload) {
+    // @ts-ignore
     state.stopWatch[payload.property] = payload.value;
   },
-  setCD(state: State, payload: { property: string; value: any }) {
+  setCD(state: State, payload: Payload) {
+    // @ts-ignore
     state.countDown[payload.property] = payload.value;
   },
   increaseSWInterval(state: State) {
