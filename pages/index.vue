@@ -30,6 +30,5 @@ import Timer from '@/components/Timer.vue';
     ...mapState('settings', ['showTitle']),
   },
 })
-export default class Home extends Vue {
-}
+export default class Home extends Vue {}
 </script>
