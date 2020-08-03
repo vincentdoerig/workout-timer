@@ -28,11 +28,11 @@
         class="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
       >
         <div
-          class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-gray-100 rounded-lg shadow-xl dark:bg-white sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
+          class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-gray-100 rounded-lg shadow-xl dark:bg-gray-900 sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
         >
           <div class="sm:flex sm:items-start">
             <div
-              class="items-center justify-center flex-shrink-0 hidden w-12 h-12 mx-auto bg-gray-200 rounded-full sm:flex sm:mx-0 sm:h-10 sm:w-10"
+              class="items-center justify-center flex-shrink-0 hidden w-12 h-12 mx-auto bg-gray-200 rounded-full dark:bg-gray-800 sm:flex sm:mx-0 sm:h-10 sm:w-10"
             >
               <svg
                 fill="currentColor"
@@ -49,14 +49,16 @@
             <div class="mt-0 sm:ml-4 lg:ml-8">
               <div class="sm:flex sm:flex-row">
                 <div>
-                  <h3 class="text-xl font-medium leading-6 text-gray-900">
+                  <h3
+                    class="text-xl font-medium leading-6 text-gray-900 dark:text-gray-100"
+                  >
                     Settings
                   </h3>
                   <div class="mt-2">
                     <div>
                       <label
                         for="break"
-                        class="block text-sm font-medium leading-5 text-gray-800"
+                        class="block text-sm font-medium leading-5 text-gray-800 dark:text-gray-200"
                         >Break time</label
                       >
                       <div class="mt-1">
@@ -74,7 +76,9 @@
                           <div
                             class="absolute inset-y-0 flex items-center pl-6 ml-12 pointer-events-none"
                           >
-                            <span class="text-sm leading-5 text-gray-700">
+                            <span
+                              class="text-sm leading-5 text-gray-700 dark:text-gray-800"
+                            >
                               seconds
                             </span>
                           </div>
@@ -92,7 +96,8 @@
                             class="text-teal-500 form-checkbox"
                             :checked="showTitle"
                             @click="toggleSiteTitle"
-                          /><span class="ml-2 text-base leading-6 text-gray-800"
+                          /><span
+                            class="ml-2 text-base leading-6 text-gray-800 dark:text-gray-200"
                             >Show title</span
                           ></label
                         >
@@ -102,45 +107,47 @@
                   </div>
                 </div>
                 <div class="hidden text-sm sm:ml-8 lg:ml-16 sm:block">
-                  <h3 class="text-lg font-medium leading-6 text-gray-900">
+                  <h3
+                    class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
+                  >
                     Keyboard Shortcuts
                   </h3>
-                  <div class="my-2 text-gray-800">
+                  <div class="my-2 text-gray-800 dark:text-gray-200">
                     <div class="leading-7">
                       Start/pause:
                       <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm dark:bg-gray-600 dark:text-white"
                         >space</kbd
                       >
                       or
                       <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm dark:bg-gray-600 dark:text-white"
                         >enter</kbd
                       >
                       or
                       <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm dark:bg-gray-600 dark:text-white"
                         >s</kbd
                       >
                     </div>
                     <div class="leading-7">
                       Start/pause break:
                       <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm dark:bg-gray-600 dark:text-white"
                         >b</kbd
                       >
                     </div>
                     <div class="leading-7">
                       Reset timer:
                       <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm dark:bg-gray-600 dark:text-white"
                         >r</kbd
                       >
                     </div>
                     <div class="leading-7">
                       Toggle sound:
                       <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
+                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm dark:bg-gray-600 dark:text-white"
                         >m</kbd
                       >
                     </div>
