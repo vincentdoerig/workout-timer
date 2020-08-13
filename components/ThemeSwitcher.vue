@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="text-base leading-6 text-gray-800">
+    <h3 class="text-base leading-6 text-gray-800 dark:text-gray-200">
       Theme
     </h3>
     <div class="flex flex-row mt-2">
@@ -14,14 +14,14 @@
       <label
         for="dark-mode"
         tabindex="0"
-        class="hover:shadow-md cursor-pointer focus:shadow-md rounded focus:shadow-outline"
+        class="rounded cursor-pointer hover:shadow-md focus:shadow-outline"
         @keydown.enter="$colorMode.preference = 'dark'"
         @keydown.space="$colorMode.preference = 'dark'"
       >
         <p class="sr-only">Dark mode</p>
         <div
-          class="w-8 h-8 bg-gray-800 rounded border-2"
-          :class="$colorMode.value === 'dark' ? 'border-teal-700 border-3' : ''"
+          class="w-8 h-8 bg-gray-800 border-2 rounded"
+          :class="$colorMode.value === 'dark' ? 'border-teal-700 border-4' : ''"
         ></div>
       </label>
       <input
@@ -34,18 +34,24 @@
       <label
         for="light-mode"
         tabindex="0"
-        class="ml-3 hover:shadow-md cursor-pointer focus:shadow-md rounded focus:shadow-outline"
+        class="ml-3 rounded cursor-pointer hover:shadow-md focus:shadow-outline"
         @keydown.enter="$colorMode.preference = 'light'"
         @keydown.space="$colorMode.preference = 'light'"
       >
         <p class="sr-only">Light mode</p>
         <div
-          class="w-8 h-8 bg-gray-200 rounded border-2"
+          class="w-8 h-8 bg-gray-200 border-2 rounded"
           :class="
-            $colorMode.value === 'light' ? 'border-teal-700 border-3' : ''
+            $colorMode.value === 'light' ? 'border-teal-700 border-4' : ''
           "
         ></div>
       </label>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'ThemeSwitcher',
+};
+</script>

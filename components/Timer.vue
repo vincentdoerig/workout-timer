@@ -30,7 +30,7 @@
             @click="startStop"
           >
             <svg
-              v-if="swState.state === 'running'"
+              v-if="stopWatch.state === 'running'"
               class="w-6 h-6 mr-3"
               fill="none"
               viewBox="0 0 24 24"
@@ -65,8 +65,8 @@
             </svg>
             <p>
               {{
-                swState.state === 'paused'
-                  ? !swState.time
+                stopWatch.state === 'paused'
+                  ? !stopWatch.time
                     ? 'Start'
                     : 'Resume'
                   : 'Pause'
@@ -74,7 +74,7 @@
             </p>
           </button>
           <button
-            v-if="swState.state === 'paused' && swState.time > 0"
+            v-if="stopWatch.state === 'paused' && stopWatch.time > 0"
             class="flex px-2 py-1 mt-4 mr-4 text-sm leading-8 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetSW"
           >
@@ -122,19 +122,19 @@
               272 224v102c0 30.53 55.71 47 80.4 76.87 9.95 12.04 6.47 29.13-9.1 29.13z"
               />
             </svg>
-            <p v-if="cdState.state === 'running'">
+            <p v-if="countDown.state === 'running'">
               Pause Break
             </p>
             <p v-else>
-              <span v-if="cdState.timeLeft > 0">Resume Break</span>
+              <span v-if="countDown.timeLeft > 0">Resume Break</span>
               <span v-else
                 >Start Break
-                <span class="text-sm">({{ cdState.breakLength }}s)</span>
+                <span class="text-sm">({{ countDown.breakLength }}s)</span>
               </span>
             </p>
           </button>
           <button
-            v-if="cdState.state === 'paused' && cdState.timeLeft > 0"
+            v-if="countDown.state === 'paused' && countDown.timeLeft > 0"
             class="flex px-2 py-1 mt-4 mr-4 text-sm leading-8 text-black transition duration-150 ease-in-out border border-teal-600 rounded-md dark:border-teal-400 dark:text-white hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
             @click="resetCD"
           >
@@ -193,7 +193,7 @@
       <button
         class="fixed bottom-0 right-0 px-4 py-3 mb-4 mr-4 border border-teal-400 rounded-lg hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
         title="Open settings"
-        @click="toggleSettings"
+        @click="isModalVisible = !isModalVisible"
       >
         <svg fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8 cog">
           <path
@@ -212,273 +212,72 @@
         </svg>
       </button>
     </section>
-    <transition
-      enter-active-class="duration-300 ease-out"
-      enter-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="duration-200 ease-in"
-      leave-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
-      <div v-if="settingsModalOpen" class="fixed inset-0 transition-opacity">
-        <div
-          class="absolute inset-0 bg-gray-700 opacity-75 dark:bg-gray-500"
-        ></div>
-      </div>
-    </transition>
-
-    <transition
-      enter-active-class="duration-300 ease-out"
-      enter-class="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
-      enter-to-class="translate-y-0 opacity-100 sm:scale-100"
-      leave-active-class="duration-200 ease-in"
-      leave-class="translate-y-0 opacity-100 sm:scale-100"
-      leave-to-class="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
-    >
-      <div
-        v-if="settingsModalOpen"
-        class="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
-      >
-        <div
-          class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-gray-100 rounded-lg shadow-xl dark:bg-white sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
-        >
-          <div class="sm:flex sm:items-start">
-            <div
-              class="items-center justify-center flex-shrink-0 hidden w-12 h-12 mx-auto bg-gray-200 rounded-full sm:flex sm:mx-0 sm:h-10 sm:w-10"
-            >
-              <svg
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                class="w-6 h-6 text-gray-600"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </div>
-            <div class="mt-0 sm:ml-4 lg:ml-8">
-              <div class="sm:flex sm:flex-row">
-                <div>
-                  <h3 class="text-xl font-medium leading-6 text-gray-900">
-                    Settings
-                  </h3>
-                  <div class="mt-2">
-                    <div>
-                      <label
-                        for="break"
-                        class="block text-sm font-medium leading-5 text-gray-800"
-                        >Break time</label
-                      >
-                      <div class="mt-1">
-                        <div class="relative">
-                          <input
-                            id="break"
-                            v-model="cdState.breakLengthSetting"
-                            class="w-32 py-1 pl-2 pr-16 text-gray-900 bg-gray-200 rounded appearance-none focus:shadow-outline sm:text-sm sm:leading-5"
-                            :class="error ? 'border border-red-500' : ''"
-                            placeholder="90"
-                            pattern="[0-9]*"
-                            type="text"
-                            @keyup.enter="toggleSettings"
-                          />
-                          <div
-                            class="absolute inset-y-0 flex items-center pl-6 ml-12 pointer-events-none"
-                          >
-                            <span class="text-sm leading-5 text-gray-700">
-                              seconds
-                            </span>
-                          </div>
-                        </div>
-                        <p v-if="error" class="text-xs italic text-red-500">
-                          Please choose a valid break time.
-                        </p>
-                      </div>
-                      <div class="my-4">
-                        <label for="title" class="inline-flex items-center">
-                          <input
-                            id="title"
-                            type="checkbox"
-                            name="title"
-                            class="text-teal-500 form-checkbox"
-                            @click="$emit('showTitle')"
-                          /><span class="ml-2 text-base leading-6 text-gray-800"
-                            >Show title</span
-                          ></label
-                        >
-                      </div>
-                      <theme-switcher />
-                    </div>
-                  </div>
-                </div>
-                <div class="hidden text-sm sm:ml-8 lg:ml-16 sm:block">
-                  <h3 class="text-lg font-medium leading-6 text-gray-900">
-                    Keyboard Shortcuts
-                  </h3>
-                  <div class="my-2 text-gray-800">
-                    <div class="leading-7">
-                      Start/pause:
-                      <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
-                        >space</kbd
-                      >
-                      or
-                      <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
-                        >enter</kbd
-                      >
-                      or
-                      <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
-                        >s</kbd
-                      >
-                    </div>
-                    <div class="leading-7">
-                      Start/pause break:
-                      <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
-                        >b</kbd
-                      >
-                    </div>
-                    <div class="leading-7">
-                      Reset timer:
-                      <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
-                        >r</kbd
-                      >
-                    </div>
-                    <div class="leading-7">
-                      Toggle sound:
-                      <kbd
-                        class="px-2 py-1 font-mono text-xs bg-gray-400 rounded-sm shadow-sm"
-                        >m</kbd
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-            <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-              <button
-                type="button"
-                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-teal-600 border border-transparent rounded-md shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline sm:text-sm sm:leading-5"
-                @click="toggleSettings"
-              >
-                Save
-              </button>
-            </span>
-            <span
-              class="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto"
-            >
-              <button
-                type="button"
-                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5"
-                @click="cancelSettings"
-              >
-                Cancel
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </transition>
+    <SettingsModal :is-open="isModalVisible" @close="isModalVisible = false" />
   </section>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'nuxt-property-decorator';
+import { Component, Vue } from 'nuxt-property-decorator';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import { Howl } from 'howler';
-import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
+import SettingsModal from '@/components/SettingsModal.vue';
+import { StopWatch, CountDown } from '../types/timer';
 
 const beepWav = require('@/static/sounds/beep.wav');
 const bongWav = require('@/static/sounds/bong.wav');
 const bongMp3 = require('@/static/sounds/bong.mp3');
 
-interface stopWatch {
-  timer: any;
-  time: number;
-  state: string;
-}
-interface countdown {
-  timer: any;
-  timeLeft: number;
-  state: string;
-  breakLength: number;
-  breakLengthSetting: number;
-}
-
 @Component({
   components: {
-    ThemeSwitcher,
+    SettingsModal,
+  },
+  methods: {
+    ...mapMutations('timer', [
+      'setBreakLength',
+      'setSW',
+      'setCD',
+      'increaseSWInterval',
+      'setSWInterval',
+      'clearSWInterval',
+      'decreaseCDInterval',
+      'setCDInterval',
+      'clearCDInterval',
+    ]),
+    // ...mapActions('timer', []),
+  },
+  computed: {
+    ...mapGetters('timer', [
+      'formattedElapsedTime',
+      'formattedBreakTime',
+      'bothRunning',
+      'bothPaused',
+    ]),
+    ...mapState('timer', ['stopWatch', 'countDown']),
   },
 })
-
 export default class Timer extends Vue {
-  settingsModalOpen: boolean = false;
-
-  // stopwatch state
-  swState: stopWatch = {
-    timer: null,
-    time: 0,
-    state: 'paused',
-  };
-
-  // countdown state
-  cdState: countdown = {
-    timer: null,
-    timeLeft: 0,
-    state: 'paused',
-    breakLength: 90,
-    breakLengthSetting: 90,
-  };
-
   muted: boolean = true;
+  isModalVisible: boolean = false;
 
-  error: boolean = false;
-
-  get formattedElapsedTime(): string {
-    const date: Date = new Date(0);
-    date.setSeconds(this.swState.time);
-    const utc: string = date.toUTCString();
-    return utc.substring(utc.indexOf(':') - 2, 25);
-  }
-
-  get formattedBreakTime(): string {
-    const date: Date = new Date(0);
-    date.setSeconds(this.cdState.timeLeft);
-    const utc: string = date.toUTCString();
-    return utc.substring(utc.indexOf(':') + 1, 25);
-  }
-
-  get bothRunning(): boolean {
-    // eslint-disable-next-line prettier/prettier
-    if (this.swState.state === 'running' && this.cdState.state === 'running')
-      return true;
-    return false;
-  }
-
-  get bothPaused(): boolean {
-    // eslint-disable-next-line prettier/prettier
-    if (this.swState.state === 'paused' && this.cdState.state === 'paused')
-      return true;
-    return false;
-  }
-
-  @Watch('cdState.state')
-  isOnBreak() {
-    this.$emit('break');
-  }
+  // State
+  stopWatch!: StopWatch;
+  countDown!: CountDown;
+  // Getters
+  formattedElapsedTime!: string;
+  bothPaused!: boolean;
+  bothRunning!: boolean;
+  // Mutations
+  setSW!: (payload: { property: string; value: any }) => void;
+  setCD!: (payload: { property: string; value: any }) => void;
+  increaseSWInterval!: () => void;
+  setSWInterval!: (interval: number) => void;
+  clearSWInterval!: () => void;
+  decreaseCDInterval!: () => void;
+  setCDInterval!: (interval: number) => void;
+  clearCDInterval!: () => void;
 
   mounted(): void {
     if (localStorage.muted) this.muted = localStorage.muted === 'true';
-    if (localStorage.breakLength) {
-      const breakLengh: number = parseInt(localStorage.breakLength);
-      this.cdState.breakLength = breakLengh;
-      this.cdState.breakLengthSetting = breakLengh;
-    }
     window.addEventListener('keydown', this.handleShortcut);
   }
 
@@ -486,71 +285,53 @@ export default class Timer extends Vue {
     window.removeEventListener('keydown', this.handleShortcut);
   }
 
-  handleShortcut(e: KeyboardEvent): void {
-    if (
-      !this.settingsModalOpen &&
-      (e.keyCode === 32 || e.key === 's' || e.key === 'Enter')
-    )
-      this.startStop();
-    if (e.key === 'b') this.startStopBreak();
-    if (e.key === 'm') this.toggleSound();
-    if (e.key === 'r') this.resetSW();
-    if (e.key === 'Escape' && this.settingsModalOpen) this.cancelSettings();
-  }
-
-  toggleSettings(): void {
-    if (
-      isNaN(this.cdState.breakLengthSetting) ||
-      this.cdState.breakLengthSetting < 1 ||
-      this.cdState.breakLengthSetting > 3600
-    ) {
-      // return an error if the input isn't a number, and not bigger than 3600 (1 hour --> max countdown value)
-      this.error = true;
-      return;
-    }
-    this.error = false;
-    this.settingsModalOpen = !this.settingsModalOpen;
-    if (!this.settingsModalOpen) {
-      // only save when settings are closed
-      localStorage.setItem(
-        'breakLength',
-        this.cdState.breakLengthSetting.toString(),
-      );
-      // set the setting to the actual break length value
-      this.cdState.breakLength = this.cdState.breakLengthSetting;
-    }
-  }
-
-  cancelSettings(): void {
-    this.cdState.breakLengthSetting = this.cdState.breakLength;
-    this.settingsModalOpen = !this.settingsModalOpen;
-  }
-
-  toggleSound(): void {
-    this.muted = !this.muted;
-    localStorage.setItem('muted', this.muted.toString());
-  }
-
   startStop(): void {
     // initial state --> start timer
-    if (!this.swState.timer || this.swState.state === 'paused') {
+    if (!this.stopWatch.timer || this.stopWatch.state === 'paused') {
       this.startSW();
-      if (this.cdState.timeLeft > 0) this.startCDRecursion();
+      if (this.countDown.timeLeft > 0) this.startCDRecursion();
     } else {
       // stop (pause) all timers
       this.stopSW();
-      if (this.cdState.timer) this.stopCD();
+      if (this.countDown.timer) this.stopCD();
     }
   }
 
+  startSW(): void {
+    this.setSW({ property: 'state', value: 'running' });
+    this.startCountingUp();
+  }
+
+  stopSW(): void {
+    this.setSW({ property: 'state', value: 'paused' });
+    this.clearSWInterval();
+    document.title = `${document.title} (stopped)`;
+  }
+
+  resetSW(): void {
+    if (this.stopWatch.state === 'running') this.startStop();
+    this.setSW({ property: 'time', value: 0 });
+    this.setSW({ property: 'state', value: 'paused' });
+    this.setSW({ property: 'timer', value: null });
+    document.title = 'Gym Timer';
+  }
+
+  startCountingUp(): void {
+    const interval = window.setInterval(() => {
+      this.increaseSWInterval();
+      document.title = this.formattedElapsedTime;
+    }, 1000);
+    this.setSW({ property: 'timer', value: interval });
+  }
+
   startStopBreak(): void {
-    if (this.cdState.timeLeft > 0) {
+    if (this.countDown.timeLeft > 0) {
       // break timer already running
       if (this.bothPaused) {
         // both timers paused => continue stopwatch and countdown
         this.startSW();
         this.startCDRecursion();
-      } else if (this.cdState.state === 'running') {
+      } else if (this.countDown.state === 'running') {
         this.stopCD();
       } else {
         this.startCDRecursion();
@@ -565,35 +346,30 @@ export default class Timer extends Vue {
     }
   }
 
-  startSW(): void {
-    this.swState.state = 'running';
-    this.swState.timer = setInterval(() => {
-      this.swState.time += 1;
-      document.title = this.formattedElapsedTime;
-    }, 1000);
+  handleShortcut(e: KeyboardEvent): void {
+    if (
+      !this.isModalVisible &&
+      (e.keyCode === 32 || e.key === 's' || e.key === 'Enter')
+    )
+      this.startStop();
+    if (e.key === 'b') this.startStopBreak();
+    if (e.key === 'm') this.toggleSound();
+    if (e.key === 'r') this.resetSW();
+    if (e.key === 'Escape' && this.isModalVisible) this.isModalVisible = false; // TODO this should also undo breakLengthSetting
   }
 
-  stopSW(): void {
-    this.swState.state = 'paused';
-    clearInterval(this.swState.timer);
-    document.title = `${document.title} (stopped)`;
-  }
-
-  resetSW(): void {
-    if (this.swState.state === 'running') this.startStop();
-    this.swState.time = 0;
-    this.swState.state = 'paused';
-    this.swState.timer = null;
-    document.title = 'Gym Timer';
+  toggleSound(): void {
+    this.muted = !this.muted;
+    localStorage.setItem('muted', this.muted.toString());
   }
 
   startCD(): void {
-    this.cdState.timeLeft = this.cdState.breakLength;
+    this.setCD({ property: 'timeLeft', value: this.countDown.breakLength });
     this.startCDRecursion();
   }
 
   startCDRecursion(): void {
-    this.cdState.state = 'running';
+    this.setCD({ property: 'state', value: 'running' });
     const endSound = new Howl({
       src: [bongMp3, bongWav],
       // volume: 0.5,
@@ -604,31 +380,32 @@ export default class Timer extends Vue {
       // volume: 0.5,
       autoplay: false,
     });
-    this.cdState.timer = setInterval(() => {
-      this.cdState.timeLeft -= 1;
+    const interval = setInterval(() => {
+      this.decreaseCDInterval();
       if (
         !this.muted &&
-        this.cdState.timeLeft <= 5 &&
-        this.cdState.timeLeft > 0
+        this.countDown.timeLeft <= 5 &&
+        this.countDown.timeLeft > 0
       )
         beep.play();
 
-      if (this.cdState.timeLeft <= 0) {
+      if (this.countDown.timeLeft <= 0) {
         // countdown finished
         this.stopCD();
         if (!this.muted) endSound.play();
       }
     }, 1000);
+    this.setCD({ property: 'timer', value: interval });
   }
 
   stopCD(): void {
-    this.cdState.state = 'paused';
-    clearTimeout(this.cdState.timer);
+    this.setCD({ property: 'state', value: 'paused' });
+    this.clearCDInterval();
   }
 
   resetCD(): void {
-    this.cdState.timeLeft = 0;
-    this.cdState.state = 'paused';
+    this.setCD({ property: 'timeLeft', value: 0 });
+    this.setCD({ property: 'state', value: 'paused' });
   }
 }
 </script>
