@@ -28,6 +28,7 @@
         class="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
       >
         <div
+          v-click-outside="cancelSettings"
           class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-gray-100 rounded-lg shadow-xl dark:bg-gray-900 sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
         >
           <div class="sm:flex sm:items-start">
@@ -186,6 +187,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator';
+import vClickOutside from 'v-click-outside';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 import { mapState, mapMutations } from 'vuex';
 import { CountDown } from '../types/timer';
@@ -201,6 +203,9 @@ import { CountDown } from '../types/timer';
   computed: {
     ...mapState('timer', ['countDown']),
     ...mapState('settings', ['showTitle']),
+  },
+  directives: {
+    clickOutside: vClickOutside.directive,
   },
 })
 export default class SettingsModal extends Vue {

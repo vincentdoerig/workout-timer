@@ -28,6 +28,7 @@
         class="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
       >
         <div
+          v-click-outside="closeModal"
           class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-gray-100 rounded-lg shadow-xl dark:bg-gray-900 sm:max-w-lg lg:max-w-xl sm:w-full sm:p-6"
         >
           <div class="sm:flex sm:items-start">
@@ -63,7 +64,7 @@
                         class="underline dark-hover:text-white hover:text-black"
                         >here</a
                       >
-                      and share it with anyone you think would enjoy.
+                      or share it with anyone you think would enjoy.
                     </p>
                     <p>
                       The source code for this website is open source and
@@ -72,7 +73,7 @@
                         href="https://github.com/vincentdoerig/workout-timer"
                         class="underline dark-hover:text-white hover:text-black"
                         >GitHub</a
-                      >. It is built with Nuxt, Typescript and TailwindCSS.
+                      >. It is built with Nuxt.js, TypeScript and Tailwind CSS.
                     </p>
                     <p>
                       Made by
@@ -95,7 +96,7 @@
               <button
                 type="button"
                 class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5"
-                @click="$emit('close')"
+                @click="closeModal"
               >
                 Close
               </button>
@@ -109,8 +110,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator';
+import vClickOutside from 'v-click-outside';
 
-@Component
+@Component({
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+})
 export default class AboutModal extends Vue {
   @Prop({ type: Boolean, required: true, default: false }) isOpen!: boolean;
 

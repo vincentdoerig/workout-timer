@@ -16,6 +16,7 @@
     "@types/howler": "^2.2.1",
     "howler": "^2.2.0",
     "nuxt": "^2.14.0",
+    "v-click-outside": "^3.0.1",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
