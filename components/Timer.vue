@@ -165,6 +165,19 @@
     </main>
     <section>
       <button
+        class="fixed bottom-0 right-0 px-4 py-3 mb-4 mr-64 border border-teal-400 rounded-lg md:mr-4 md:mb-64 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
+        title="Open about"
+        @click="isAboutModalVisible = !isAboutModalVisible"
+      >
+        <svg fill="currentColor" viewBox="0 0 20 20" class="w-8 h-8 cog">
+          <path
+            fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+      <button
         class="fixed bottom-0 right-0 px-4 py-3 mb-4 mr-32 border border-teal-400 rounded-lg md:mr-4 md:mb-32 hover:bg-gray-200 dark-hover:bg-gray-800 focus:outline-none focus:bg-gray-400 dark-focus:bg-black"
         :title="muted ? 'Click to unmute' : 'Click to mute'"
         @click="toggleSound"
@@ -212,6 +225,10 @@
         </svg>
       </button>
     </section>
+    <AboutModal
+      :is-open="isAboutModalVisible"
+      @close="isAboutModalVisible = false"
+    />
     <SettingsModal :is-open="isModalVisible" @close="isModalVisible = false" />
   </section>
 </template>
@@ -221,6 +238,7 @@ import { Component, Vue } from 'nuxt-property-decorator';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 import { Howl } from 'howler';
 import SettingsModal from '@/components/SettingsModal.vue';
+import AboutModal from '@/components/AboutModal.vue';
 import { StopWatch, CountDown } from '../types/timer';
 
 const beepWav = require('@/static/sounds/beep.wav');
@@ -230,6 +248,7 @@ const bongMp3 = require('@/static/sounds/bong.mp3');
 @Component({
   components: {
     SettingsModal,
+    AboutModal,
   },
   methods: {
     ...mapMutations('timer', [
@@ -258,6 +277,7 @@ const bongMp3 = require('@/static/sounds/bong.mp3');
 export default class Timer extends Vue {
   muted: boolean = true;
   isModalVisible: boolean = false;
+  isAboutModalVisible: boolean = false;
 
   // State
   stopWatch!: StopWatch;
@@ -349,6 +369,7 @@ export default class Timer extends Vue {
   handleShortcut(e: KeyboardEvent): void {
     if (
       !this.isModalVisible &&
+      !this.isAboutModalVisible &&
       (e.keyCode === 32 || e.key === 's' || e.key === 'Enter')
     )
       this.startStop();
@@ -356,6 +377,8 @@ export default class Timer extends Vue {
     if (e.key === 'm') this.toggleSound();
     if (e.key === 'r') this.resetSW();
     if (e.key === 'Escape' && this.isModalVisible) this.isModalVisible = false; // TODO this should also undo breakLengthSetting
+    if (e.key === 'Escape' && this.isAboutModalVisible)
+      this.isAboutModalVisible = false;
   }
 
   toggleSound(): void {
