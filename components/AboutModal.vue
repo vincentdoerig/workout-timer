@@ -78,7 +78,7 @@
                     <p>
                       Made by
                       <a
-                        href="https://twitter.com/vincentdoerig"
+                        href="https://doerig.dev"
                         class="underline dark-hover:text-white hover:text-black"
                       >
                         Vincent</a
