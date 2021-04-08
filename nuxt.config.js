@@ -44,16 +44,11 @@ export default {
     ],
     script: [
       {
-        src: 'https://sa.gymtimer.io/app.js',
+        src: 'https://plausible.io/js/plausible.js',
         async: true,
         defer: true,
         body: true,
-      },
-    ],
-    noscript: [
-      {
-        innerHTML: '<img src="https://sa.gymtimer.io/image.gif" alt="">',
-        body: true,
+        'data-domain': 'timer.doerig.dev',
       },
     ],
     __dangerouslyDisableSanitizers: ['noscript'],

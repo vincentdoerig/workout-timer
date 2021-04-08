@@ -57,7 +57,7 @@
                   </h3>
                   <div class="my-4 space-y-3 text-gray-800 dark:text-gray-200">
                     <p>
-                      Thank you for using gymtimer.io! If you appreciate this
+                      Thank you for using timer.doerig.dev! If you appreciate this
                       app you can support the creator
                       <a
                         href="https://ko-fi.com/vincentdoerig"
